@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orange Digital — Templates & Prompt Packs for Professionals</title>
+    <meta name="description" content="Premium landing page templates and AI prompt packs for marketers, developers, and freelancers. Built by professionals, for professionals.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-hover: #1a1a25;
+            --border: #ffffff12;
+            --text: #e8e8ed;
+            --text-muted: #8888a0;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --accent-glow: #6366f120;
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --radius: 12px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: #0a0a0fdd;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+        }
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        /* HERO */
+        .hero {
+            padding: 140px 24px 80px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 100px;
+            background: var(--accent-glow);
+            border: 1px solid #6366f140;
+            color: var(--accent-hover);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 0.02em;
+        }
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.03em;
+        }
+        .hero h1 .accent { color: var(--accent); }
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 550px;
+            margin: 0 auto 32px;
+        }
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .hero-cta:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        /* SECTIONS */
+        section { padding: 80px 24px; }
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 48px;
+        }
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        /* PRODUCT GRID */
+        .products {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            gap: 24px;
+        }
+
+        /* FEATURED PRODUCT (LaunchKit) */
+        .product-featured {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        .product-featured .product-visual {
+            background: linear-gradient(135deg, #1e1b4b, #312e81, #1e1b4b);
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 320px;
+        }
+        .product-featured .product-visual .mock-browser {
+            width: 100%;
+            max-width: 360px;
+            background: #0f0f18;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px #00000060;
+        }
+        .mock-browser-bar {
+            background: #1a1a28;
+            padding: 8px 12px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .mock-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffffff15;
+        }
+        .mock-browser-body {
+            padding: 20px;
+            min-height: 160px;
+        }
+        .mock-line {
+            height: 8px;
+            background: #ffffff10;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .mock-line.short { width: 60%; }
+        .mock-line.medium { width: 80%; }
+        .mock-btn {
+            display: inline-block;
+            width: 80px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 6px;
+            margin-top: 12px;
+        }
+
+        .product-featured .product-info {
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .product-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+            width: fit-content;
+        }
+        .tag-templates { background: #6366f120; color: var(--accent-hover); }
+        .tag-prompts { background: #22c55e20; color: var(--green); }
+        .tag-bundle { background: #f59e0b20; color: var(--orange); }
+
+        .product-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+        .product-info .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        .product-info ul {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+        .product-info ul li {
+            padding: 4px 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .product-info ul li::before {
+            content: "✓";
+            color: var(--green);
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .price {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .price-note {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .buy-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: background 0.2s, transform 0.15s;
+            border: none;
+            cursor: pointer;
+            width: fit-content;
+        }
+        .buy-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        /* PROMPT PACK CARDS */
+        .prompt-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .pack-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .pack-card:hover {
+            border-color: #ffffff20;
+            transform: translateY(-2px);
+        }
+        .pack-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+        .icon-content { background: #3b82f620; }
+        .icon-dev { background: #8b5cf620; }
+        .icon-freelance { background: #f59e0b20; }
+
+        .pack-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .pack-card .pack-desc {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 16px;
+        }
+        .pack-card .pack-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+        .meta-chip {
+            padding: 3px 10px;
+            background: #ffffff08;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .pack-card .price-row { margin-bottom: 16px; }
+        .pack-card .price { font-size: 1.5rem; }
+
+        /* BUNDLE SECTION */
+        .bundle-card {
+            max-width: 700px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #1e1b4b, #1a1a2e);
+            border: 1px solid #6366f140;
+            border-radius: var(--radius);
+            padding: 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .bundle-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, #6366f108 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .bundle-card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .bundle-card .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+        .bundle-includes {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .bundle-item {
+            padding: 8px 16px;
+            background: #ffffff08;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .bundle-pricing {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .bundle-original {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+        .bundle-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+        .bundle-savings {
+            color: var(--green);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        /* FAQ */
+        .faq {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+        }
+        .faq-item summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .faq-item summary::after {
+            content: "+";
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+        .faq-item[open] summary::after {
+            transform: rotate(45deg);
+        }
+        .faq-item p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin-top: 12px;
+            line-height: 1.7;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .product-featured { grid-template-columns: 1fr; }
+            .prompt-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .hero { padding: 120px 24px 60px; }
+            .product-featured .product-visual { min-height: 200px; padding: 32px; }
+            .product-featured .product-info { padding: 32px; }
+            .bundle-card { padding: 32px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAV -->
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="logo">Orange Digital</a>
+            <div class="nav-links">
+                <a href="#templates">Templates</a>
+                <a href="#prompts">Prompt Packs</a>
+                <a href="#bundle">Bundle</a>
+                <a href="#faq">FAQ</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge">4 Products — Ready to Ship</div>
+        <h1>Professional tools for people who <span class="accent">ship</span></h1>
+        <p>Premium landing page templates and AI prompt packs for marketers, developers, and freelancers. Zero dependencies. Instant download.</p>
+        <a href="#templates" class="hero-cta">Browse Products ↓</a>
+    </section>
+
+    <!-- LAUNCHKIT (Featured) -->
+    <section id="templates">
+        <div class="section-header">
+            <h2>Landing Page Templates</h2>
+            <p>Ship your next project with a beautiful landing page — no frameworks, no dependencies, just clean HTML/CSS/JS.</p>
+        </div>
+        <div class="products">
+            <div class="product-featured">
+                <div class="product-visual">
+                    <div class="mock-browser">
+                        <div class="mock-browser-bar">
+                            <div class="mock-dot"></div>
+                            <div class="mock-dot"></div>
+                            <div class="mock-dot"></div>
+                        </div>
+                        <div class="mock-browser-body">
+                            <div class="mock-line short"></div>
+                            <div class="mock-line"></div>
+                            <div class="mock-line medium"></div>
+                            <div class="mock-line short"></div>
+                            <div class="mock-btn"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <div class="product-tag tag-templates">Templates</div>
+                    <h3>LaunchKit — 3 Landing Pages</h3>
+                    <p class="subtitle">SaaS, Portfolio, and Coming Soon templates built for speed and conversion.</p>
+                    <ul>
+                        <li>3 production-ready templates</li>
+                        <li>Responsive, mobile-first design</li>
+                        <li>CSS variables for easy theming</li>
+                        <li>Zero dependencies — pure HTML/CSS/JS</li>
+                        <li>Semantic HTML, accessibility-ready</li>
+                    </ul>
+                    <div class="price-row">
+                        <span class="price">$29</span>
+                        <span class="price-note">one-time purchase</span>
+                    </div>
+                    <a href="#BUY_LINK_LAUNCHKIT" class="buy-btn">Get LaunchKit →</a>
+                    <div style="margin-top: 12px; display: flex; gap: 16px;">
+                        <a href="templates/saas/" style="color: var(--text-muted); font-size: 0.82rem; text-decoration: underline;">SaaS Preview ↗</a>
+                        <a href="templates/portfolio/" style="color: var(--text-muted); font-size: 0.82rem; text-decoration: underline;">Portfolio Preview ↗</a>
+                        <a href="templates/coming-soon/" style="color: var(--text-muted); font-size: 0.82rem; text-decoration: underline;">Coming Soon Preview ↗</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROMPT PACKS -->
+    <section id="prompts">
+        <div class="section-header">
+            <h2>AI Prompt Packs</h2>
+            <p>126 battle-tested prompts across 3 professional domains. Each prompt is engineered to produce specific, actionable output — not generic AI slop.</p>
+        </div>
+        <div class="products">
+            <div class="prompt-grid">
+                <!-- Content Marketing -->
+                <div class="pack-card">
+                    <div class="pack-icon icon-content">📝</div>
+                    <div class="product-tag tag-prompts">Prompt Pack</div>
+                    <h3>Content Marketing</h3>
+                    <p class="pack-desc">40 prompts for blog writing, social media, email marketing, SEO strategy, and content repurposing.</p>
+                    <div class="pack-meta">
+                        <span class="meta-chip">Blog</span>
+                        <span class="meta-chip">Social</span>
+                        <span class="meta-chip">Email</span>
+                        <span class="meta-chip">SEO</span>
+                        <span class="meta-chip">Repurposing</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price">$12</span>
+                    </div>
+                    <a href="#BUY_LINK_CONTENT" class="buy-btn">Get Pack →</a>
+                </div>
+
+                <!-- Developer Productivity -->
+                <div class="pack-card">
+                    <div class="pack-icon icon-dev">⚡</div>
+                    <div class="product-tag tag-prompts">Prompt Pack</div>
+                    <h3>Developer Productivity</h3>
+                    <p class="pack-desc">40 prompts for code review, debugging, documentation, architecture decisions, and dev workflow.</p>
+                    <div class="pack-meta">
+                        <span class="meta-chip">Code Review</span>
+                        <span class="meta-chip">Debugging</span>
+                        <span class="meta-chip">Docs</span>
+                        <span class="meta-chip">Architecture</span>
+                        <span class="meta-chip">Workflow</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price">$12</span>
+                    </div>
+                    <a href="#BUY_LINK_DEV" class="buy-btn">Get Pack →</a>
+                </div>
+
+                <!-- Freelancer Business -->
+                <div class="pack-card">
+                    <div class="pack-icon icon-freelance">💼</div>
+                    <div class="product-tag tag-prompts">Prompt Pack</div>
+                    <h3>Freelancer Business</h3>
+                    <p class="pack-desc">36 prompts for proposals, pricing, client communication, portfolio branding, and business operations.</p>
+                    <div class="pack-meta">
+                        <span class="meta-chip">Proposals</span>
+                        <span class="meta-chip">Pricing</span>
+                        <span class="meta-chip">Clients</span>
+                        <span class="meta-chip">Portfolio</span>
+                        <span class="meta-chip">Operations</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price">$12</span>
+                    </div>
+                    <a href="#BUY_LINK_FREELANCER" class="buy-btn">Get Pack →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BUNDLE -->
+    <section id="bundle">
+        <div class="section-header">
+            <h2>Save with Bundles</h2>
+            <p>Get everything at a discount. One purchase, instant access to the complete collection.</p>
+        </div>
+        <div class="bundle-card">
+            <div class="product-tag tag-bundle" style="margin: 0 auto 16px;">Best Value</div>
+            <h3>The Everything Bundle</h3>
+            <p class="subtitle">LaunchKit + All 3 Prompt Packs (126 prompts)</p>
+            <div class="bundle-includes">
+                <span class="bundle-item">LaunchKit Templates</span>
+                <span class="bundle-item">Content Marketing</span>
+                <span class="bundle-item">Developer Productivity</span>
+                <span class="bundle-item">Freelancer Business</span>
+            </div>
+            <div class="bundle-pricing">
+                <span class="bundle-original">$65</span>
+                <span class="bundle-price">$49</span>
+            </div>
+            <p class="bundle-savings">Save $16 — that's 25% off</p>
+            <a href="#BUY_LINK_BUNDLE" class="buy-btn" style="margin: 0 auto;">Get Everything →</a>
+        </div>
+
+        <!-- Smaller bundle option -->
+        <div style="max-width: 500px; margin: 24px auto 0; text-align: center;">
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px;">
+                <h4 style="font-size: 1rem; margin-bottom: 4px;">Prompt Pack Collection</h4>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;">All 3 prompt packs (126 prompts) — no templates</p>
+                <div style="display: flex; align-items: baseline; justify-content: center; gap: 8px; margin-bottom: 12px;">
+                    <span style="color: var(--text-muted); text-decoration: line-through;">$36</span>
+                    <span style="font-size: 1.5rem; font-weight: 800;">$29</span>
+                </div>
+                <a href="#BUY_LINK_PROMPT_BUNDLE" class="buy-btn" style="margin: 0 auto;">Get All Packs →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+        <div class="section-header">
+            <h2>Questions? Answered.</h2>
+        </div>
+        <div class="faq">
+            <details class="faq-item">
+                <summary>What format are the templates in?</summary>
+                <p>Pure HTML, CSS, and JavaScript files. No frameworks, no build tools, no dependencies. Open in any browser, edit in any code editor, deploy anywhere. Each template uses CSS custom properties (variables) so you can change colors and fonts in seconds.</p>
+            </details>
+            <details class="faq-item">
+                <summary>What format are the prompt packs in?</summary>
+                <p>Each pack includes Markdown files (.md) for easy copy-paste and beautifully styled HTML files you can print to PDF. Both formats are included in every purchase.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Can I use these for client work?</summary>
+                <p>Yes. You get a full commercial license. Use the templates for your own sites or client projects. Use the prompts for your own work or to serve clients. The only restriction: don't resell the files themselves as a competing product.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Do I get updates?</summary>
+                <p>Yes. All future updates to any product you purchase are included at no extra cost. Buy once, benefit forever.</p>
+            </details>
+            <details class="faq-item">
+                <summary>What if the prompts don't work for me?</summary>
+                <p>Every prompt is designed with specific anti-generic instructions built in — they tell the AI exactly what NOT to do (no filler, no clichés, no generic advice). If you're not satisfied, reach out and we'll make it right.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Which AI tools do the prompts work with?</summary>
+                <p>All of them. The prompts are written for ChatGPT, Claude, Gemini, and any other LLM. They're tool-agnostic by design — good prompts work everywhere.</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Orange Digital — Templates & prompts for professionals who ship.</p>
+        <p style="margin-top: 8px; font-size: 0.8rem;">Built with care. No tracking. No cookies. Just products.</p>
+    </footer>
+</body>
+</html>
