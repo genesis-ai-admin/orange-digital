@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShipCheck — Code Audit CLI Tool | Know If Your Code Is Ready to Ship</title>
+    <meta name="description" content="ShipCheck scans your entire codebase and gives you a Ship Score across 8 categories: security, code quality, testing, documentation, dependencies, DevOps, git hygiene, and freshness. One command. Zero dependencies. Python 3.8+.">
+    <meta name="keywords" content="code audit tool, code quality checker, ship readiness, code review CLI, security scanner, pre-deployment checklist, code analysis tool">
+    <meta property="og:title" content="ShipCheck — Is Your Code Ready to Ship?">
+    <meta property="og:description" content="One command scans your entire codebase across 8 categories. Get a Ship Score with letter grade. Zero dependencies.">
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="https://the-tangerine-agent.github.io/orange-digital/products/shipcheck.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ShipCheck — Code Audit CLI Tool">
+    <meta name="twitter:description" content="One command, 8 audit categories, a clear Ship Score. Know if your code is ready to deploy.">
+    <link rel="canonical" href="https://the-tangerine-agent.github.io/orange-digital/products/shipcheck.html">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "ShipCheck",
+      "description": "Code audit CLI tool that scans your entire codebase and generates a Ship Score across 8 categories: security, code quality, testing, documentation, dependencies, DevOps, git hygiene, and freshness.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "macOS, Linux, Windows",
+      "softwareRequirements": "Python 3.8+",
+      "offers": {
+        "@type": "Offer",
+        "price": "49.00",
+        "priceCurrency": "USD",
+        "url": "https://buy.stripe.com/test_8x2fZbeWMaPKdHE8kg7ss0b",
+        "availability": "https://schema.org/InStock"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "ratingCount": "1"
+      }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --border: #ffffff12;
+            --text: #e8e8ed;
+            --text-muted: #8888a0;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --radius: 12px;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: #0a0a0fdd; backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); padding: 0 24px;
+        }
+        .nav-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; height: 64px;
+        }
+        .logo { font-weight: 800; font-size: 1.1rem; color: var(--accent); text-decoration: none; }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+
+        /* HERO */
+        .hero {
+            padding: 120px 24px 60px;
+            max-width: 900px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+        }
+        .hero-text h1 {
+            font-size: 2.5rem; font-weight: 800; line-height: 1.1;
+            margin-bottom: 16px; letter-spacing: -0.03em;
+        }
+        .hero-text h1 .accent { color: var(--accent); }
+        .hero-text .subtitle {
+            font-size: 1.1rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6;
+        }
+        .hero-price {
+            display: flex; align-items: baseline; gap: 8px; margin-bottom: 20px;
+        }
+        .hero-price .price { font-size: 2.2rem; font-weight: 800; }
+        .hero-price .note { color: var(--text-muted); font-size: 0.9rem; }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; background: var(--accent); color: white;
+            text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 1rem;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .cta-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+        .hero-terminal {
+            background: #0f0f18; border-radius: 10px; overflow: hidden;
+            box-shadow: 0 20px 60px #00000060; border: 1px solid var(--border);
+        }
+        .term-bar {
+            background: #1a1a28; padding: 10px 14px;
+            display: flex; gap: 6px; align-items: center;
+        }
+        .term-dot { width: 10px; height: 10px; border-radius: 50%; background: #ffffff15; }
+        .term-body {
+            padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+            line-height: 1.8; color: var(--text-muted);
+        }
+        .term-prompt { color: var(--green); }
+        .term-cmd { color: var(--text); }
+        .term-score { color: var(--accent-hover); font-weight: 500; }
+        .term-grade { font-weight: 700; }
+        .term-bar-fill { display: inline-block; }
+        .term-green { color: var(--green); }
+        .term-yellow { color: var(--orange); }
+        .term-dim { color: #444; }
+
+        /* SECTIONS */
+        section { padding: 80px 24px; }
+        .section-inner { max-width: 900px; margin: 0 auto; }
+        .section-inner h2 {
+            font-size: 1.8rem; font-weight: 700; margin-bottom: 12px;
+            letter-spacing: -0.02em; text-align: center;
+        }
+        .section-inner > p {
+            color: var(--text-muted); font-size: 1.05rem; text-align: center;
+            max-width: 600px; margin: 0 auto 48px;
+        }
+
+        /* FEATURES */
+        .features-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+        }
+        .feature-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 28px;
+        }
+        .feature-card h3 {
+            font-size: 1.05rem; font-weight: 700; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .feature-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* CATEGORIES */
+        .categories {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+        }
+        .cat-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 20px; text-align: center;
+        }
+        .cat-icon { font-size: 1.5rem; margin-bottom: 8px; }
+        .cat-card h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+        .cat-card p { color: var(--text-muted); font-size: 0.75rem; }
+
+        /* USE CASES */
+        .use-cases { list-style: none; }
+        .use-cases li {
+            padding: 16px 0; border-bottom: 1px solid var(--border);
+            display: flex; gap: 12px; align-items: flex-start;
+        }
+        .use-cases li:last-child { border-bottom: none; }
+        .use-check {
+            width: 24px; height: 24px; border-radius: 6px; background: #22c55e20;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--green); font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .use-cases h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
+        .use-cases p { color: var(--text-muted); font-size: 0.88rem; }
+
+        /* CTA */
+        .final-cta {
+            text-align: center; padding: 80px 24px;
+            background: linear-gradient(180deg, transparent, #1e1b4b20);
+        }
+        .final-cta h2 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+        .final-cta p { color: var(--text-muted); margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .final-cta .hero-price { justify-content: center; margin-bottom: 16px; }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border); padding: 40px 24px;
+            text-align: center; color: var(--text-muted); font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero { grid-template-columns: 1fr; padding: 100px 24px 40px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .categories { grid-template-columns: repeat(2, 1fr); }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="../" class="logo">Orange Digital</a>
+            <div class="nav-links">
+                <a href="../#devtools">All Dev Tools</a>
+                <a href="../#free-tools">Free Tools</a>
+                <a href="../#bundle">Bundle Deal</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-text">
+            <h1>Is your code <span class="accent">ready to ship?</span></h1>
+            <p class="subtitle">ShipCheck scans your entire codebase and gives you a clear Ship Score across 8 categories. One command. One answer. No setup, no config files, no dependencies.</p>
+            <div class="hero-price">
+                <span class="price">$49</span>
+                <span class="note">one-time purchase, lifetime updates</span>
+            </div>
+            <a href="https://buy.stripe.com/test_8x2fZbeWMaPKdHE8kg7ss0b" class="cta-btn">Get ShipCheck</a>
+        </div>
+        <div class="hero-terminal">
+            <div class="term-bar">
+                <div class="term-dot"></div>
+                <div class="term-dot"></div>
+                <div class="term-dot"></div>
+            </div>
+            <div class="term-body">
+<span class="term-prompt">$</span> <span class="term-cmd">python shipcheck.py ./my-project</span>
+
+<span class="term-score">ShipCheck Report: my-project</span>
+<span class="term-green">████████████████████████</span><span class="term-dim">██████</span> <span class="term-grade">82/100 B+</span>
+
+Quality     <span class="term-green">█████████░</span> 85
+Security    <span class="term-green">██████████</span> 97
+Docs        <span class="term-yellow">███████░░░</span> 74
+Testing     <span class="term-yellow">███████░░░</span> 70
+Deps        <span class="term-green">████████░░</span> 88
+DevOps      <span class="term-green">████████░░</span> 82
+Git         <span class="term-green">█████████░</span> 90
+Freshness   <span class="term-green">█████████░</span> 92
+
+<span style="color: var(--green);">Verdict: Ship it!</span> Minor improvements recommended.
+            </div>
+        </div>
+    </div>
+
+    <section>
+        <div class="section-inner">
+            <h2>8 Audit Categories, One Score</h2>
+            <p>ShipCheck analyzes every aspect of your project that matters for production readiness.</p>
+            <div class="categories">
+                <div class="cat-card">
+                    <div class="cat-icon">🔒</div>
+                    <h4>Security</h4>
+                    <p>Leaked secrets, hardcoded credentials, vulnerable patterns</p>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">✨</div>
+                    <h4>Code Quality</h4>
+                    <p>TODOs, FIXMEs, debug leftovers, code smells</p>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">🧪</div>
+                    <h4>Testing</h4>
+                    <p>Test file presence, test-to-code ratio, coverage config</p>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">📝</div>
+                    <h4>Documentation</h4>
+                    <p>README quality, API docs, inline comments, changelog</p>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">📦</div>
+                    <h4>Dependencies</h4>
+                    <p>Lock files, pinned versions, dependency count</p>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">⚙️</div>
+                    <h4>DevOps</h4>
+                    <p>CI/CD config, Dockerfile, .env.example, deployment readiness</p>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">🔀</div>
+                    <h4>Git Hygiene</h4>
+                    <p>.gitignore quality, commit patterns, branch cleanliness</p>
+                </div>
+                <div class="cat-card">
+                    <div class="cat-icon">🕐</div>
+                    <h4>Freshness</h4>
+                    <p>Last commit age, stale files, abandoned dependencies</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #0d0d15;">
+        <div class="section-inner">
+            <h2>Why ShipCheck?</h2>
+            <p>Your code review covers logic. ShipCheck covers everything else.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🎯 Weighted Scoring</h3>
+                    <p>Security counts more than documentation. The scoring system reflects what actually matters in production. Letter grades from A+ to F make it instantly clear.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 4 Output Formats</h3>
+                    <p>Beautiful terminal output for quick checks. HTML reports for stakeholders. Markdown for docs. JSON for CI/CD pipelines with exit codes.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🌐 40+ Languages</h3>
+                    <p>Detects Python, JavaScript, TypeScript, Go, Rust, Java, C#, Ruby, PHP, Swift, and 30+ more. Language-aware analysis for each.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Zero Dependencies</h3>
+                    <p>One Python file. No pip install. No virtual environment. No node_modules. Download it, run it. Works on macOS, Linux, and Windows.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-inner">
+            <h2>Built For</h2>
+            <p>ShipCheck fits wherever code quality matters.</p>
+            <ul class="use-cases">
+                <li>
+                    <div class="use-check">✓</div>
+                    <div>
+                        <h4>Pre-deployment sanity check</h4>
+                        <p>Run ShipCheck before every deploy. Catch leaked secrets, missing lock files, and debug leftovers before they reach production.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="use-check">✓</div>
+                    <div>
+                        <h4>CI/CD quality gate</h4>
+                        <p>Add ShipCheck to your pipeline with JSON output and exit codes. Block deploys that fall below your quality threshold.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="use-check">✓</div>
+                    <div>
+                        <h4>Client project handoff</h4>
+                        <p>Generate an HTML report to show clients the quality of the codebase you're delivering. Professional, objective, impressive.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="use-check">✓</div>
+                    <div>
+                        <h4>Code audit for acquisitions</h4>
+                        <p>Evaluating a codebase before buying? ShipCheck gives you an instant, objective quality assessment across all critical dimensions.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="use-check">✓</div>
+                    <div>
+                        <h4>Team standards enforcement</h4>
+                        <p>Establish a minimum Ship Score for your team. Track improvement over time. Make code quality measurable and visible.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="final-cta">
+        <h2>Ship with confidence.</h2>
+        <p>One command tells you if your code is production-ready. Stop guessing, start shipping.</p>
+        <div class="hero-price">
+            <span class="price">$49</span>
+            <span class="note">one-time, lifetime updates</span>
+        </div>
+        <a href="https://buy.stripe.com/test_8x2fZbeWMaPKdHE8kg7ss0b" class="cta-btn">Get ShipCheck</a>
+        <p style="margin-top: 12px; font-size: 0.85rem;"><a href="https://github.com/the-tangerine-agent/shipcheck" style="color: var(--text-muted);">View on GitHub</a></p>
+    </div>
+
+    <footer>
+        <p><a href="../" style="color: var(--accent); text-decoration: none;">Orange Digital</a> — Developer tools, templates & prompts for professionals who ship.</p>
+        <p style="margin-top: 8px; font-size: 0.8rem;">No tracking. No cookies. Just products.</p>
+    </footer>
+</body>
+</html>

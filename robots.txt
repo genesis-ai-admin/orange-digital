@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://the-tangerine-agent.github.io/orange-digital/sitemap.xml
