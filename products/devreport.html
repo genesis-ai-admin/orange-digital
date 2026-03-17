@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevReport — Automated Project Status Reports from Your Codebase | Orange Digital</title>
+    <meta name="description" content="DevReport scans your project and generates professional status reports with health scores, dependency analysis, git history, and technical debt tracking. One command. Multiple formats. Zero dependencies.">
+    <meta name="keywords" content="project report generator, code analysis tool, project health score, developer report, codebase scanner, technical debt tracker, git history analysis">
+    <meta property="og:title" content="DevReport — Professional Project Reports from Your Codebase">
+    <meta property="og:description" content="One command generates a full project health report. 50+ languages, multiple output formats, zero dependencies.">
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="https://the-tangerine-agent.github.io/orange-digital/products/devreport.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DevReport — Automated Project Status Reports">
+    <meta name="twitter:description" content="Scan your codebase, get a professional report. Health scores, dependency analysis, git history. Zero dependencies.">
+    <link rel="canonical" href="https://the-tangerine-agent.github.io/orange-digital/products/devreport.html">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "DevReport",
+      "description": "Automated project status report generator that scans your codebase and produces professional reports with health scores, dependency analysis, git history, and technical debt tracking.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "macOS, Linux, Windows",
+      "softwareRequirements": "Python 3",
+      "offers": {
+        "@type": "Offer",
+        "price": "19.00",
+        "priceCurrency": "USD",
+        "url": "https://buy.stripe.com/test_3cI7sF9Csf60eLI9ok7ss00",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --border: #ffffff12;
+            --text: #e8e8ed;
+            --text-muted: #8888a0;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --radius: 12px;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: #0a0a0fdd; backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); padding: 0 24px;
+        }
+        .nav-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; height: 64px;
+        }
+        .logo { font-weight: 800; font-size: 1.1rem; color: var(--accent); text-decoration: none; }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .hero {
+            padding: 120px 24px 60px;
+            max-width: 900px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+        }
+        .hero-text h1 {
+            font-size: 2.5rem; font-weight: 800; line-height: 1.1;
+            margin-bottom: 16px; letter-spacing: -0.03em;
+        }
+        .hero-text h1 .accent { color: var(--accent); }
+        .hero-text .subtitle {
+            font-size: 1.1rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6;
+        }
+        .hero-price {
+            display: flex; align-items: baseline; gap: 8px; margin-bottom: 20px;
+        }
+        .hero-price .price { font-size: 2.2rem; font-weight: 800; }
+        .hero-price .note { color: var(--text-muted); font-size: 0.9rem; }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; background: var(--accent); color: white;
+            text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 1rem;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .cta-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .hero-terminal {
+            background: #0f0f18; border-radius: 10px; overflow: hidden;
+            box-shadow: 0 20px 60px #00000060; border: 1px solid var(--border);
+        }
+        .term-bar {
+            background: #1a1a28; padding: 10px 14px;
+            display: flex; gap: 6px; align-items: center;
+        }
+        .term-dot { width: 10px; height: 10px; border-radius: 50%; background: #ffffff15; }
+        .term-body {
+            padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+            line-height: 1.8; color: var(--text-muted);
+        }
+        .term-prompt { color: var(--green); }
+        .term-cmd { color: var(--text); }
+        .term-score { color: var(--accent-hover); font-weight: 500; }
+        .term-grade { font-weight: 700; }
+        .term-green { color: var(--green); }
+        .term-yellow { color: var(--orange); }
+        .term-dim { color: #444; }
+        section { padding: 80px 24px; }
+        .section-inner { max-width: 900px; margin: 0 auto; }
+        .section-inner h2 {
+            font-size: 1.8rem; font-weight: 700; margin-bottom: 12px;
+            letter-spacing: -0.02em; text-align: center;
+        }
+        .section-inner > p {
+            color: var(--text-muted); font-size: 1.05rem; text-align: center;
+            max-width: 600px; margin: 0 auto 48px;
+        }
+        .features-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+        }
+        .feature-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 28px;
+        }
+        .feature-card h3 {
+            font-size: 1.05rem; font-weight: 700; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .feature-card p { color: var(--text-muted); font-size: 0.9rem; }
+        .use-cases { list-style: none; }
+        .use-cases li {
+            padding: 16px 0; border-bottom: 1px solid var(--border);
+            display: flex; gap: 12px; align-items: flex-start;
+        }
+        .use-cases li:last-child { border-bottom: none; }
+        .use-check {
+            width: 24px; height: 24px; border-radius: 6px; background: #22c55e20;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--green); font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .use-cases h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
+        .use-cases p { color: var(--text-muted); font-size: 0.88rem; }
+        .final-cta {
+            text-align: center; padding: 80px 24px;
+            background: linear-gradient(180deg, transparent, #1e1b4b20);
+        }
+        .final-cta h2 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+        .final-cta p { color: var(--text-muted); margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .final-cta .hero-price { justify-content: center; margin-bottom: 16px; }
+        footer {
+            border-top: 1px solid var(--border); padding: 40px 24px;
+            text-align: center; color: var(--text-muted); font-size: 0.85rem;
+        }
+        @media (max-width: 768px) {
+            .hero { grid-template-columns: 1fr; padding: 100px 24px 40px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="../" class="logo">Orange Digital</a>
+            <div class="nav-links">
+                <a href="../#devtools">All Dev Tools</a>
+                <a href="../#free-tools">Free Tools</a>
+                <a href="../#bundle">Bundle Deal</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-text">
+            <h1>Your codebase, <span class="accent">one report.</span></h1>
+            <p class="subtitle">DevReport scans your project and generates a professional status report with health scores, dependency analysis, git history, and technical debt tracking. 50+ languages. Multiple formats. Zero dependencies.</p>
+            <div class="hero-price">
+                <span class="price">$19</span>
+                <span class="note">one-time purchase, lifetime updates</span>
+            </div>
+            <a href="https://buy.stripe.com/test_3cI7sF9Csf60eLI9ok7ss00" class="cta-btn">Get DevReport</a>
+        </div>
+        <div class="hero-terminal">
+            <div class="term-bar">
+                <div class="term-dot"></div>
+                <div class="term-dot"></div>
+                <div class="term-dot"></div>
+            </div>
+            <div class="term-body">
+<span class="term-prompt">$</span> <span class="term-cmd">python devreport.py ./my-saas-app</span>
+
+<span class="term-score">DevReport: my-saas-app</span>
+Health Score: <span class="term-grade">B+ (84/100)</span>
+
+<span class="term-green">Languages:</span>  Python 62% | JS 28% | HTML 10%
+<span class="term-green">Total LOC:</span>  14,280 across 87 files
+<span class="term-green">Dependencies:</span> 23 (pip) + 12 (npm)
+<span class="term-yellow">TODOs:</span>      7 items across 4 files
+<span class="term-green">Git:</span>        342 commits, 3 contributors
+<span class="term-green">Last commit:</span> 2 hours ago
+
+<span style="color: var(--green);">Report saved to devreport.html</span>
+            </div>
+        </div>
+    </div>
+
+    <section>
+        <div class="section-inner">
+            <h2>Everything in One Report</h2>
+            <p>DevReport analyzes every dimension of your project and packages it into a single, shareable document.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>📊 Project Health Score</h3>
+                    <p>A+ to F grade based on README quality, tests, CI/CD, documentation, and project structure. One number that tells you where you stand.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🌐 50+ Languages</h3>
+                    <p>Recognizes Python, JavaScript, TypeScript, Go, Rust, Java, C#, Ruby, PHP, Swift, and dozens more. Accurate line counting for each.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📦 Dependency Scanning</h3>
+                    <p>Detects and counts dependencies from npm, pip, Cargo, Go modules, Composer, Bundler, and more. Know exactly what your project relies on.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔀 Git History Analysis</h3>
+                    <p>Commit count, contributor list, activity trends, and last commit age. Understand the development velocity at a glance.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔍 Technical Debt Tracking</h3>
+                    <p>Finds every TODO, FIXME, HACK, and XXX across your codebase. Know exactly where the shortcuts are hiding.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📄 Multiple Output Formats</h3>
+                    <p>HTML for stakeholders. Markdown for docs. JSON for automation. Terminal summary for quick checks. One tool, four formats.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #0d0d15;">
+        <div class="section-inner">
+            <h2>Built For</h2>
+            <p>DevReport fits wherever project visibility matters.</p>
+            <ul class="use-cases">
+                <li>
+                    <div class="use-check">✓</div>
+                    <div>
+                        <h4>Client sprint reports</h4>
+                        <p>Generate polished HTML reports for freelance clients. Show exactly what was done, what changed, and where the project stands.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="use-check">✓</div>
+                    <div>
+                        <h4>Project health checks</h4>
+                        <p>Team leads get an instant snapshot of project health. Spot stale dependencies, growing tech debt, and documentation gaps.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="use-check">✓</div>
+                    <div>
+                        <h4>Codebase audits</h4>
+                        <p>Evaluating an unfamiliar repo? DevReport gives you a comprehensive overview in seconds — languages, structure, health, dependencies.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="use-check">✓</div>
+                    <div>
+                        <h4>Onboarding new developers</h4>
+                        <p>Give new team members a DevReport to understand the project structure, tech stack, and current state before they write a single line.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="use-check">✓</div>
+                    <div>
+                        <h4>PR attachments</h4>
+                        <p>Attach a DevReport summary to pull requests. Reviewers see the big picture, not just the diff.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="final-cta">
+        <h2>Know your project inside out.</h2>
+        <p>One command scans your codebase and generates a professional report. Stop guessing, start reporting.</p>
+        <div class="hero-price">
+            <span class="price">$19</span>
+            <span class="note">one-time, lifetime updates</span>
+        </div>
+        <a href="https://buy.stripe.com/test_3cI7sF9Csf60eLI9ok7ss00" class="cta-btn">Get DevReport</a>
+    </div>
+
+    <footer>
+        <p><a href="../" style="color: var(--accent); text-decoration: none;">Orange Digital</a> — Developer tools, templates & prompts for professionals who ship.</p>
+        <p style="margin-top: 8px; font-size: 0.8rem;">No tracking. No cookies. Just products.</p>
+    </footer>
+</body>
+</html>

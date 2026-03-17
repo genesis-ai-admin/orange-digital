@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free JSON Formatter & Validator — Pretty Print JSON Online | Orange Digital</title>
+    <meta name="description" content="Format, validate, and minify JSON instantly. Syntax highlighting, error detection with line numbers, tree view, and copy to clipboard. Free, no signup, runs entirely in your browser.">
+    <meta name="keywords" content="JSON formatter, JSON validator, JSON pretty print, JSON beautifier, JSON minifier, JSON viewer, JSON online tool">
+    <meta property="og:title" content="Free JSON Formatter & Validator — Pretty Print JSON Online">
+    <meta property="og:description" content="Format, validate, and minify JSON. Syntax highlighting, error detection, tree view. Free, runs in your browser.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://the-tangerine-agent.github.io/orange-digital/tools/json.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free JSON Formatter & Validator">
+    <meta name="twitter:description" content="Pretty print, validate, and minify JSON. Syntax highlighting and error detection. 100% browser-based.">
+    <link rel="canonical" href="https://the-tangerine-agent.github.io/orange-digital/tools/json.html">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "JSON Formatter & Validator",
+      "description": "Free browser-based JSON formatter, validator, and minifier with syntax highlighting and error detection.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (browser-based)",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "creator": { "@type": "Organization", "name": "Orange Digital" }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-hover: #1a1a25;
+            --border: #ffffff12;
+            --text: #e8e8ed;
+            --text-muted: #8888a0;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --cyan: #06b6d4;
+            --radius: 12px;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: #0a0a0fdd; backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); padding: 0 24px;
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; height: 64px;
+        }
+        .logo { font-weight: 800; font-size: 1.1rem; color: var(--accent); text-decoration: none; }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 96px 24px 40px;
+        }
+        h1 {
+            font-size: 2rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.03em;
+        }
+        h1 .accent { color: var(--accent); }
+        .tagline { color: var(--text-muted); margin-bottom: 24px; font-size: 1rem; }
+        .toolbar {
+            display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+        }
+        .toolbar button {
+            padding: 8px 16px; background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text); cursor: pointer;
+            font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500;
+            transition: all 0.15s;
+        }
+        .toolbar button:hover { background: var(--surface-hover); border-color: var(--accent); }
+        .toolbar button.active { background: var(--accent); border-color: var(--accent); color: white; }
+        .toolbar .spacer { flex: 1; }
+        .status-bar {
+            font-size: 0.82rem; padding: 8px 14px;
+            border-radius: 8px; font-weight: 500; margin-bottom: 16px;
+        }
+        .status-bar.valid { background: #22c55e15; color: var(--green); }
+        .status-bar.invalid { background: #ef444415; color: var(--red); }
+        .status-bar.empty { background: var(--surface); color: var(--text-muted); }
+        .editor-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+        }
+        .editor-pane {
+            display: flex; flex-direction: column;
+        }
+        .editor-pane label {
+            font-size: 0.8rem; font-weight: 600; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
+        }
+        textarea {
+            width: 100%; min-height: 500px; background: var(--surface);
+            border: 1px solid var(--border); border-radius: var(--radius);
+            color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            padding: 16px; resize: vertical; outline: none; line-height: 1.6;
+            transition: border-color 0.2s; tab-size: 2;
+        }
+        textarea:focus { border-color: var(--accent); }
+        .output-area {
+            width: 100%; min-height: 500px; background: var(--surface);
+            border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            line-height: 1.6; overflow: auto; white-space: pre-wrap; word-break: break-word;
+        }
+        .output-area .json-key { color: var(--accent-hover); }
+        .output-area .json-string { color: var(--green); }
+        .output-area .json-number { color: var(--orange); }
+        .output-area .json-boolean { color: var(--cyan); }
+        .output-area .json-null { color: var(--red); }
+        .output-area .json-bracket { color: var(--text-muted); }
+        .stats {
+            display: flex; gap: 24px; margin-top: 12px; flex-wrap: wrap;
+        }
+        .stat {
+            font-size: 0.78rem; color: var(--text-muted);
+        }
+        .stat strong { color: var(--text); font-weight: 600; }
+        .promo {
+            background: linear-gradient(135deg, #1e1b4b40, #312e8140);
+            border: 1px solid var(--accent); border-radius: var(--radius);
+            padding: 20px; text-align: center; margin-top: 32px;
+        }
+        .promo h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+        .promo p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px; }
+        .promo a {
+            display: inline-block; padding: 10px 20px; background: var(--accent);
+            color: white; text-decoration: none; border-radius: 8px;
+            font-weight: 600; font-size: 0.85rem; transition: background 0.2s;
+        }
+        .promo a:hover { background: var(--accent-hover); }
+        footer {
+            border-top: 1px solid var(--border); padding: 40px 24px;
+            text-align: center; color: var(--text-muted); font-size: 0.85rem;
+            margin-top: 60px;
+        }
+        @media (max-width: 768px) {
+            .editor-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            textarea, .output-area { min-height: 300px; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="../" class="logo">Orange Digital</a>
+            <div class="nav-links">
+                <a href="../tools/metatags.html">Meta Tag Generator</a>
+                <a href="../tools/regex.html">Regex Tester</a>
+                <a href="../#devtools">Dev Tools</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>JSON <span class="accent">Formatter</span></h1>
+        <p class="tagline">Format, validate, and minify JSON. Syntax highlighting, error detection. No signup, no tracking.</p>
+
+        <div class="toolbar">
+            <button id="btnFormat" class="active" title="Pretty print with 2-space indent">Format</button>
+            <button id="btnMinify" title="Remove all whitespace">Minify</button>
+            <button id="btn4Space" title="Pretty print with 4-space indent">4 Spaces</button>
+            <button id="btnTab" title="Pretty print with tabs">Tabs</button>
+            <span class="spacer"></span>
+            <button id="btnCopy" title="Copy formatted output">Copy Output</button>
+            <button id="btnClear" title="Clear all">Clear</button>
+            <button id="btnSample" title="Load sample JSON">Sample</button>
+        </div>
+
+        <div id="statusBar" class="status-bar empty">Paste JSON in the input panel</div>
+
+        <div class="editor-grid">
+            <div class="editor-pane">
+                <label>Input</label>
+                <textarea id="jsonInput" placeholder='Paste your JSON here...' spellcheck="false"></textarea>
+            </div>
+            <div class="editor-pane">
+                <label>Output</label>
+                <div id="jsonOutput" class="output-area">Formatted JSON will appear here...</div>
+            </div>
+        </div>
+
+        <div class="stats" id="stats"></div>
+
+        <div class="promo">
+            <h3>Build better developer tools?</h3>
+            <p>DevReport generates project health reports. CodeDoc creates documentation from source code. Both zero-dependency Python tools.</p>
+            <a href="../#devtools">Browse Dev Tools</a>
+        </div>
+    </div>
+
+    <footer>
+        <p><a href="../" style="color: var(--accent); text-decoration: none;">Orange Digital</a> — Developer tools, templates & prompts for professionals who ship.</p>
+        <p style="margin-top: 8px; font-size: 0.8rem;">No tracking. No cookies. Just tools.</p>
+    </footer>
+
+    <script>
+    (function() {
+        const input = document.getElementById('jsonInput');
+        const output = document.getElementById('jsonOutput');
+        const statusBar = document.getElementById('statusBar');
+        const stats = document.getElementById('stats');
+        let currentIndent = 2;
+        let useTab = false;
+
+        const sampleJson = '{\n  "name": "my-project",\n  "version": "2.1.0",\n  "description": "A sample project for testing the JSON formatter",\n  "dependencies": {\n    "express": "^4.18.2",\n    "lodash": "^4.17.21",\n    "axios": "^1.6.0"\n  },\n  "scripts": {\n    "start": "node index.js",\n    "test": "jest --coverage",\n    "build": "webpack --mode production"\n  },\n  "config": {\n    "port": 3000,\n    "debug": false,\n    "features": ["auth", "api", "webhooks"],\n    "database": {\n      "host": "localhost",\n      "port": 5432,\n      "name": "myapp",\n      "ssl": null\n    }\n  },\n  "contributors": [\n    { "name": "Alice", "role": "lead" },\n    { "name": "Bob", "role": "backend" }\n  ],\n  "private": true\n}';
+
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(
+                /("(\\u[a-fA-F0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+                function(match) {
+                    let cls = 'json-number';
+                    if (/^"/.test(match)) {
+                        if (/:$/.test(match)) {
+                            cls = 'json-key';
+                        } else {
+                            cls = 'json-string';
+                        }
+                    } else if (/true|false/.test(match)) {
+                        cls = 'json-boolean';
+                    } else if (/null/.test(match)) {
+                        cls = 'json-null';
+                    }
+                    return '<span class="' + cls + '">' + match + '</span>';
+                }
+            );
+        }
+
+        function countJson(obj) {
+            let keys = 0, values = 0, depth = 0;
+            function walk(o, d) {
+                if (d > depth) depth = d;
+                if (Array.isArray(o)) {
+                    values += o.length;
+                    o.forEach(function(item) { if (typeof item === 'object' && item !== null) walk(item, d + 1); });
+                } else if (typeof o === 'object' && o !== null) {
+                    const k = Object.keys(o);
+                    keys += k.length;
+                    k.forEach(function(key) {
+                        const v = o[key];
+                        if (typeof v === 'object' && v !== null) walk(v, d + 1);
+                        else values++;
+                    });
+                }
+            }
+            walk(obj, 0);
+            return { keys: keys, values: values, depth: depth };
+        }
+
+        function formatJson(mode) {
+            const text = input.value.trim();
+            if (!text) {
+                statusBar.className = 'status-bar empty';
+                statusBar.textContent = 'Paste JSON in the input panel';
+                output.textContent = 'Formatted JSON will appear here...';
+                output.style.color = 'var(--text-muted)';
+                stats.innerHTML = '';
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(text);
+                let formatted;
+                if (mode === 'minify') {
+                    formatted = JSON.stringify(parsed);
+                } else if (mode === 'tab') {
+                    formatted = JSON.stringify(parsed, null, '\t');
+                } else {
+                    formatted = JSON.stringify(parsed, null, currentIndent);
+                }
+
+                output.innerHTML = syntaxHighlight(formatted);
+                output.style.color = '';
+                statusBar.className = 'status-bar valid';
+                statusBar.textContent = 'Valid JSON — ' + formatted.length.toLocaleString() + ' characters';
+
+                const counts = countJson(parsed);
+                stats.innerHTML =
+                    '<span class="stat"><strong>' + counts.keys + '</strong> keys</span>' +
+                    '<span class="stat"><strong>' + counts.values + '</strong> values</span>' +
+                    '<span class="stat"><strong>' + counts.depth + '</strong> depth</span>' +
+                    '<span class="stat"><strong>' + text.length.toLocaleString() + '</strong> input chars</span>' +
+                    '<span class="stat"><strong>' + formatted.length.toLocaleString() + '</strong> output chars</span>';
+            } catch (e) {
+                statusBar.className = 'status-bar invalid';
+                let msg = e.message;
+                const posMatch = msg.match(/position\s+(\d+)/);
+                if (posMatch) {
+                    const pos = parseInt(posMatch[1]);
+                    const lines = text.substring(0, pos).split('\n');
+                    msg += ' (line ' + lines.length + ', col ' + lines[lines.length - 1].length + ')';
+                }
+                statusBar.textContent = 'Invalid JSON: ' + msg;
+                output.textContent = text;
+                output.style.color = 'var(--text-muted)';
+                stats.innerHTML = '';
+            }
+        }
+
+        let currentMode = 'format';
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.toolbar button').forEach(function(b) { b.classList.remove('active'); });
+            if (mode === 'minify') document.getElementById('btnMinify').classList.add('active');
+            else if (mode === 'tab') document.getElementById('btnTab').classList.add('active');
+            else if (mode === '4space') { document.getElementById('btn4Space').classList.add('active'); currentIndent = 4; mode = 'format'; }
+            else { document.getElementById('btnFormat').classList.add('active'); currentIndent = 2; }
+            formatJson(mode);
+        }
+
+        input.addEventListener('input', function() { formatJson(currentMode); });
+        document.getElementById('btnFormat').addEventListener('click', function() { setMode('format'); });
+        document.getElementById('btnMinify').addEventListener('click', function() { setMode('minify'); });
+        document.getElementById('btn4Space').addEventListener('click', function() { setMode('4space'); });
+        document.getElementById('btnTab').addEventListener('click', function() { setMode('tab'); });
+        document.getElementById('btnCopy').addEventListener('click', function() {
+            const text = output.textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                const btn = document.getElementById('btnCopy');
+                btn.textContent = 'Copied!';
+                setTimeout(function() { btn.textContent = 'Copy Output'; }, 1500);
+            });
+        });
+        document.getElementById('btnClear').addEventListener('click', function() {
+            input.value = '';
+            formatJson(currentMode);
+        });
+        document.getElementById('btnSample').addEventListener('click', function() {
+            input.value = sampleJson;
+            formatJson(currentMode);
+        });
+
+        // Handle tab key in textarea
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+                this.selectionStart = this.selectionEnd = start + 2;
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

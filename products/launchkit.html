@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaunchKit — Premium Landing Page Templates | Orange Digital</title>
+    <meta name="description" content="3 production-ready landing page templates: SaaS, Portfolio, and Coming Soon. Vanilla HTML/CSS/JS, fully responsive, CSS variable theming. No frameworks, no build tools.">
+    <meta name="keywords" content="landing page template, HTML template, SaaS landing page, portfolio template, coming soon page, responsive template, no framework template">
+    <meta property="og:title" content="LaunchKit — 3 Premium Landing Page Templates, Zero Dependencies">
+    <meta property="og:description" content="SaaS, Portfolio, and Coming Soon templates. Pure HTML/CSS/JS, responsive, customizable via CSS variables. Ship in minutes.">
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="https://the-tangerine-agent.github.io/orange-digital/products/launchkit.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LaunchKit — Premium Landing Page Templates">
+    <meta name="twitter:description" content="3 production-ready templates. SaaS, Portfolio, Coming Soon. Pure HTML, no frameworks, ship in minutes.">
+    <link rel="canonical" href="https://the-tangerine-agent.github.io/orange-digital/products/launchkit.html">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "LaunchKit",
+      "description": "Premium landing page template bundle with 3 production-ready templates (SaaS, Portfolio, Coming Soon). Pure HTML/CSS/JS, responsive, customizable via CSS variables.",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Any (browser-based)",
+      "offers": {
+        "@type": "Offer",
+        "price": "29.00",
+        "priceCurrency": "USD",
+        "url": "https://buy.stripe.com/test_6oUeV701S9LGfPMcAw7ss01",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --border: #ffffff12;
+            --text: #e8e8ed;
+            --text-muted: #8888a0;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --radius: 12px;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: #0a0a0fdd; backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); padding: 0 24px;
+        }
+        .nav-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; height: 64px;
+        }
+        .logo { font-weight: 800; font-size: 1.1rem; color: var(--accent); text-decoration: none; }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .hero {
+            padding: 120px 24px 60px;
+            max-width: 900px; margin: 0 auto; text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.8rem; font-weight: 800; line-height: 1.1;
+            margin-bottom: 16px; letter-spacing: -0.03em;
+        }
+        .hero h1 .accent { color: var(--accent); }
+        .hero .subtitle {
+            font-size: 1.15rem; color: var(--text-muted); margin-bottom: 28px; line-height: 1.6;
+            max-width: 600px; margin-left: auto; margin-right: auto;
+        }
+        .hero-price {
+            display: flex; align-items: baseline; gap: 8px; margin-bottom: 20px; justify-content: center;
+        }
+        .hero-price .price { font-size: 2.2rem; font-weight: 800; }
+        .hero-price .note { color: var(--text-muted); font-size: 0.9rem; }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; background: var(--accent); color: white;
+            text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 1rem;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .cta-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        section { padding: 80px 24px; }
+        .section-inner { max-width: 900px; margin: 0 auto; }
+        .section-inner h2 {
+            font-size: 1.8rem; font-weight: 700; margin-bottom: 12px;
+            letter-spacing: -0.02em; text-align: center;
+        }
+        .section-inner > p {
+            color: var(--text-muted); font-size: 1.05rem; text-align: center;
+            max-width: 600px; margin: 0 auto 48px;
+        }
+        .templates-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+        }
+        .template-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 32px; text-align: center;
+        }
+        .template-icon { font-size: 2.5rem; margin-bottom: 16px; }
+        .template-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+        .template-card p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 16px; }
+        .template-features { list-style: none; text-align: left; }
+        .template-features li {
+            font-size: 0.82rem; color: var(--text-muted); padding: 4px 0;
+            display: flex; gap: 8px; align-items: center;
+        }
+        .template-features li::before { content: "✓"; color: var(--green); font-weight: 700; font-size: 0.75rem; }
+        .features-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+        }
+        .feature-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 28px;
+        }
+        .feature-card h3 {
+            font-size: 1.05rem; font-weight: 700; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .feature-card p { color: var(--text-muted); font-size: 0.9rem; }
+        .final-cta {
+            text-align: center; padding: 80px 24px;
+            background: linear-gradient(180deg, transparent, #1e1b4b20);
+        }
+        .final-cta h2 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+        .final-cta p { color: var(--text-muted); margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .final-cta .hero-price { justify-content: center; margin-bottom: 16px; }
+        footer {
+            border-top: 1px solid var(--border); padding: 40px 24px;
+            text-align: center; color: var(--text-muted); font-size: 0.85rem;
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .templates-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="../" class="logo">Orange Digital</a>
+            <div class="nav-links">
+                <a href="../#devtools">All Dev Tools</a>
+                <a href="../#free-tools">Free Tools</a>
+                <a href="../#bundle">Bundle Deal</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Ship your landing page <span class="accent">in minutes.</span></h1>
+        <p class="subtitle">3 production-ready templates for SaaS, portfolios, and pre-launch campaigns. Pure HTML/CSS/JS — no frameworks, no build tools, no dependencies. Just open, customize, deploy.</p>
+        <div class="hero-price">
+            <span class="price">$29</span>
+            <span class="note">one-time purchase, all 3 templates</span>
+        </div>
+        <a href="https://buy.stripe.com/test_6oUeV701S9LGfPMcAw7ss01" class="cta-btn">Get LaunchKit</a>
+    </div>
+
+    <section>
+        <div class="section-inner">
+            <h2>3 Templates, Every Launch Scenario</h2>
+            <p>Each template is fully responsive, accessible, and ready to deploy to any static host.</p>
+            <div class="templates-grid">
+                <div class="template-card">
+                    <div class="template-icon">🚀</div>
+                    <h3>SaaS</h3>
+                    <p>Everything you need to sell a software product.</p>
+                    <ul class="template-features">
+                        <li>Hero with CTA</li>
+                        <li>Feature grid</li>
+                        <li>Pricing table (3 tiers)</li>
+                        <li>Testimonial carousel</li>
+                        <li>FAQ accordion</li>
+                        <li>Footer with links</li>
+                    </ul>
+                </div>
+                <div class="template-card">
+                    <div class="template-icon">🎨</div>
+                    <h3>Portfolio</h3>
+                    <p>Showcase your work and win clients.</p>
+                    <ul class="template-features">
+                        <li>Project showcase grid</li>
+                        <li>About section + stats</li>
+                        <li>Services cards</li>
+                        <li>Testimonials</li>
+                        <li>Contact form</li>
+                        <li>Social links</li>
+                    </ul>
+                </div>
+                <div class="template-card">
+                    <div class="template-icon">⏳</div>
+                    <h3>Coming Soon</h3>
+                    <p>Build hype before you launch.</p>
+                    <ul class="template-features">
+                        <li>Countdown timer</li>
+                        <li>Email capture form</li>
+                        <li>Social proof avatars</li>
+                        <li>Animated effects</li>
+                        <li>Interactive background</li>
+                        <li>Mobile-optimized</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: #0d0d15;">
+        <div class="section-inner">
+            <h2>Why LaunchKit?</h2>
+            <p>No React. No Tailwind. No 200MB node_modules. Just clean code that works everywhere.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>🎨 CSS Variable Theming</h3>
+                    <p>Change colors, fonts, spacing, and border radius by editing a few CSS variables. Rebrand the entire template in 30 seconds flat.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📱 Fully Responsive</h3>
+                    <p>Every template looks great on mobile, tablet, and desktop. Tested across Chrome, Firefox, Safari, and Edge.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Zero Build Step</h3>
+                    <p>Open the HTML file in your browser. Edit in any text editor. Deploy by dragging to Netlify, Vercel, or pushing to GitHub Pages.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📝 Form-Ready</h3>
+                    <p>Contact forms and email captures are pre-wired for Formspree, Netlify Forms, or your own API. Just add your endpoint.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="final-cta">
+        <h2>Launch today, not next week.</h2>
+        <p>3 beautiful templates, zero dependencies. Open, customize, deploy. Your landing page is one download away.</p>
+        <div class="hero-price">
+            <span class="price">$29</span>
+            <span class="note">one-time, all 3 templates</span>
+        </div>
+        <a href="https://buy.stripe.com/test_6oUeV701S9LGfPMcAw7ss01" class="cta-btn">Get LaunchKit</a>
+    </div>
+
+    <footer>
+        <p><a href="../" style="color: var(--accent); text-decoration: none;">Orange Digital</a> — Developer tools, templates & prompts for professionals who ship.</p>
+        <p style="margin-top: 8px; font-size: 0.8rem;">No tracking. No cookies. Just products.</p>
+    </footer>
+</body>
+</html>
