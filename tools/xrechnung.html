@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XRechnung Generator — Kostenlos E-Rechnung erstellen | Orange Digital</title>
+    <meta name="description" content="XRechnung kostenlos erstellen. E-Rechnung im UBL-Format generieren — EN 16931 konform. Läuft komplett im Browser, keine Daten werden gesendet. Auch auf Englisch verfügbar.">
+    <meta property="og:title" content="Kostenloser XRechnung Generator — E-Rechnung erstellen">
+    <meta property="og:description" content="XRechnung / E-Rechnung im UBL 2.1 Format erstellen. Kostenlos, im Browser, keine Registrierung.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://the-tangerine-agent.github.io/orange-digital/tools/xrechnung.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Kostenloser XRechnung Generator">
+    <meta name="twitter:description" content="E-Rechnung erstellen — UBL 2.1, EN 16931 konform. Kostenlos im Browser.">
+    <meta name="keywords" content="XRechnung erstellen, XRechnung Generator, E-Rechnung erstellen kostenlos, XRechnung kostenlos, UBL Rechnung, EN 16931, elektronische Rechnung, Kleinunternehmer XRechnung, XRechnung Freelancer, create XRechnung free, German electronic invoice">
+    <link rel="canonical" href="https://the-tangerine-agent.github.io/orange-digital/tools/xrechnung.html">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "XRechnung Generator",
+      "description": "Free browser-based XRechnung / e-invoice generator. Creates valid UBL 2.1 XML compliant with EN 16931 and CIUS-DE.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any (browser-based)",
+      "inLanguage": ["de", "en"],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Orange Digital"
+      }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-hover: #1a1a25;
+            --border: #ffffff12;
+            --text: #e8e8ed;
+            --text-muted: #8888a0;
+            --accent: #f59e0b;
+            --accent-hover: #fbbf24;
+            --accent-glow: #f59e0b20;
+            --green: #22c55e;
+            --red: #ef4444;
+            --radius: 12px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: #0a0a0fdd;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+        }
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 56px;
+        }
+        .nav-brand {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85em;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .lang-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.8em;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .lang-toggle:hover { background: var(--surface-hover); border-color: var(--accent); }
+
+        /* MAIN */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 24px 60px;
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 40px 0 32px;
+        }
+        .hero h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+        }
+        .hero h1 span { color: var(--accent); }
+        .hero p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 8px;
+            font-size: 1.05em;
+        }
+        .hero .badges {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.78em;
+            color: var(--text-muted);
+        }
+        .badge.green { border-color: #22c55e40; color: var(--green); }
+
+        /* FORM */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+
+        .form-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+        .form-section h2 {
+            font-size: 0.95em;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .form-section h2 .icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+        }
+        .section-seller .icon { background: var(--accent-glow); }
+        .section-buyer .icon { background: #6366f120; }
+        .section-invoice .icon { background: #22c55e20; }
+        .section-payment .icon { background: #ec489920; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .form-row.single { grid-template-columns: 1fr; }
+        .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+        label {
+            display: block;
+            font-size: 0.75em;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        label .req { color: var(--accent); }
+
+        input, select, textarea {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.85em;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        input::placeholder { color: #555; }
+        select { cursor: pointer; }
+        select option { background: var(--surface); }
+
+        /* LINE ITEMS */
+        .items-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .items-section h2 {
+            font-size: 0.95em;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .items-header {
+            display: grid;
+            grid-template-columns: 2fr 80px 100px 80px 40px;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding: 0 4px;
+        }
+        .items-header span {
+            font-size: 0.7em;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .line-item {
+            display: grid;
+            grid-template-columns: 2fr 80px 100px 80px 40px;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+        .line-item input { padding: 8px 10px; }
+        .btn-remove {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--red);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .btn-remove:hover { background: #ef444420; border-color: var(--red); }
+        .btn-add {
+            background: var(--bg);
+            border: 1px dashed var(--border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.82em;
+            width: 100%;
+            transition: all 0.2s;
+            margin-top: 4px;
+        }
+        .btn-add:hover { border-color: var(--accent); color: var(--accent); }
+
+        @media (max-width: 768px) {
+            .items-header { display: none; }
+            .line-item {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+                padding: 12px;
+                background: var(--bg);
+                border-radius: 8px;
+                margin-bottom: 12px;
+            }
+            .line-item input:first-child { grid-column: 1 / -1; }
+            .btn-remove { grid-column: 2; justify-self: end; }
+        }
+
+        /* TOTALS */
+        .totals-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 24px;
+            padding: 16px 4px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 12px;
+        }
+        .total-item {
+            text-align: right;
+        }
+        .total-item .label {
+            font-size: 0.72em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .total-item .value {
+            font-size: 1.1em;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .total-item.grand .value { color: var(--accent); font-size: 1.3em; }
+
+        /* ACTIONS */
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover { border-color: var(--accent); }
+
+        /* XML PREVIEW */
+        .preview-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+            display: none;
+        }
+        .preview-section.visible { display: block; }
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .preview-header h2 {
+            font-size: 0.9em;
+            font-weight: 700;
+        }
+        .preview-actions { display: flex; gap: 8px; }
+        .preview-actions button {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.78em;
+            transition: all 0.2s;
+        }
+        .preview-actions button:hover { color: var(--text); border-color: var(--accent); }
+        .preview-actions button.copied { color: var(--green); border-color: var(--green); }
+        #xml-output {
+            padding: 20px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75em;
+            line-height: 1.7;
+            overflow-x: auto;
+            white-space: pre;
+            color: #a0a0b8;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* INFO SECTION */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-top: 40px;
+        }
+        @media (max-width: 768px) { .info-grid { grid-template-columns: 1fr; } }
+        .info-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+        .info-card h3 {
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .info-card p {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-muted);
+            font-size: 0.8em;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--green);
+            color: #000;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85em;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 200;
+        }
+        .toast.visible { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="../index.html" class="nav-brand">Orange Digital</a>
+        <div class="nav-links">
+            <a href="../index.html" data-i18n="nav_back">Zurück zum Shop</a>
+            <a href="metatags.html">Meta Tags</a>
+            <a href="regex.html">Regex</a>
+            <a href="json.html">JSON</a>
+            <button class="lang-toggle" onclick="toggleLang()" id="lang-btn">EN</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1 data-i18n="hero_title"><span>XRechnung</span> Generator</h1>
+        <p data-i18n="hero_desc">E-Rechnung erstellen — kostenlos, im Browser, ohne Registrierung. Konform mit EN 16931 und CIUS-DE.</p>
+        <div class="badges">
+            <span class="badge green" data-i18n="badge_free">100% Kostenlos</span>
+            <span class="badge" data-i18n="badge_privacy">Keine Daten werden gesendet</span>
+            <span class="badge" data-i18n="badge_standard">UBL 2.1 / EN 16931</span>
+            <span class="badge" data-i18n="badge_lang">Deutsch + English</span>
+        </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="form-grid">
+        <!-- SELLER -->
+        <div class="form-section section-seller">
+            <h2><span class="icon">🏢</span> <span data-i18n="seller_title">Verkäufer / Rechnungssteller</span></h2>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_company">Firmenname <span class="req">*</span></label>
+                    <input type="text" id="seller-name" placeholder="Muster GmbH">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_street">Straße + Hausnummer <span class="req">*</span></label>
+                    <input type="text" id="seller-street" placeholder="Musterstraße 1">
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label data-i18n="lbl_zip">PLZ <span class="req">*</span></label>
+                    <input type="text" id="seller-zip" placeholder="10115">
+                </div>
+                <div>
+                    <label data-i18n="lbl_city">Ort <span class="req">*</span></label>
+                    <input type="text" id="seller-city" placeholder="Berlin">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_country">Land</label>
+                    <select id="seller-country">
+                        <option value="DE" selected>Deutschland (DE)</option>
+                        <option value="AT">Österreich (AT)</option>
+                        <option value="CH">Schweiz (CH)</option>
+                        <option value="NL">Niederlande (NL)</option>
+                        <option value="FR">Frankreich (FR)</option>
+                        <option value="IT">Italien (IT)</option>
+                        <option value="ES">Spanien (ES)</option>
+                        <option value="PL">Polen (PL)</option>
+                        <option value="BE">Belgien (BE)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label data-i18n="lbl_vatid">USt-IdNr.</label>
+                    <input type="text" id="seller-vatid" placeholder="DE123456789">
+                </div>
+                <div>
+                    <label data-i18n="lbl_taxnr">Steuernummer</label>
+                    <input type="text" id="seller-taxnr" placeholder="12/345/67890">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_email">E-Mail</label>
+                    <input type="email" id="seller-email" placeholder="rechnung@beispiel.de">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_contact">Ansprechpartner</label>
+                    <input type="text" id="seller-contact" placeholder="Max Mustermann">
+                </div>
+            </div>
+        </div>
+
+        <!-- BUYER -->
+        <div class="form-section section-buyer">
+            <h2><span class="icon">👤</span> <span data-i18n="buyer_title">Käufer / Rechnungsempfänger</span></h2>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_company">Firmenname <span class="req">*</span></label>
+                    <input type="text" id="buyer-name" placeholder="Kunde AG">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_street">Straße + Hausnummer <span class="req">*</span></label>
+                    <input type="text" id="buyer-street" placeholder="Kundenweg 42">
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label data-i18n="lbl_zip">PLZ <span class="req">*</span></label>
+                    <input type="text" id="buyer-zip" placeholder="80331">
+                </div>
+                <div>
+                    <label data-i18n="lbl_city">Ort <span class="req">*</span></label>
+                    <input type="text" id="buyer-city" placeholder="München">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_country">Land</label>
+                    <select id="buyer-country">
+                        <option value="DE" selected>Deutschland (DE)</option>
+                        <option value="AT">Österreich (AT)</option>
+                        <option value="CH">Schweiz (CH)</option>
+                        <option value="NL">Niederlande (NL)</option>
+                        <option value="FR">Frankreich (FR)</option>
+                        <option value="IT">Italien (IT)</option>
+                        <option value="ES">Spanien (ES)</option>
+                        <option value="PL">Polen (PL)</option>
+                        <option value="BE">Belgien (BE)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_vatid">USt-IdNr.</label>
+                    <input type="text" id="buyer-vatid" placeholder="DE987654321">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_leitweg">Leitweg-ID <span style="font-weight:400;color:var(--text-muted)">(B2G)</span></label>
+                    <input type="text" id="buyer-leitweg" placeholder="991-12345-67">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_buyer_email">E-Mail</label>
+                    <input type="email" id="buyer-email" placeholder="einkauf@kunde.de">
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_buyer_ref">Bestellreferenz (Buyer Reference) <span class="req">*</span></label>
+                    <input type="text" id="buyer-ref" placeholder="PO-2026-001 oder Leitweg-ID">
+                </div>
+            </div>
+        </div>
+
+        <!-- INVOICE DETAILS -->
+        <div class="form-section section-invoice">
+            <h2><span class="icon">📄</span> <span data-i18n="invoice_title">Rechnungsdetails</span></h2>
+            <div class="form-row">
+                <div>
+                    <label data-i18n="lbl_invnr">Rechnungsnummer <span class="req">*</span></label>
+                    <input type="text" id="inv-number" placeholder="RE-2026-001">
+                </div>
+                <div>
+                    <label data-i18n="lbl_invdate">Rechnungsdatum <span class="req">*</span></label>
+                    <input type="date" id="inv-date">
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label data-i18n="lbl_duedate">Fälligkeitsdatum</label>
+                    <input type="date" id="inv-due-date">
+                </div>
+                <div>
+                    <label data-i18n="lbl_currency">Währung</label>
+                    <select id="inv-currency">
+                        <option value="EUR" selected>EUR (€)</option>
+                        <option value="USD">USD ($)</option>
+                        <option value="GBP">GBP (£)</option>
+                        <option value="CHF">CHF</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_invtype">Rechnungstyp</label>
+                    <select id="inv-type">
+                        <option value="380" selected data-i18n="opt_invoice">Rechnung (380)</option>
+                        <option value="381" data-i18n="opt_credit">Gutschrift (381)</option>
+                        <option value="384" data-i18n="opt_correction">Korrekturrechnung (384)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_note">Bemerkung / Zahlungsbedingungen</label>
+                    <textarea id="inv-note" rows="2" placeholder="Zahlbar innerhalb von 30 Tagen"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAYMENT -->
+        <div class="form-section section-payment">
+            <h2><span class="icon">💳</span> <span data-i18n="payment_title">Zahlungsinformationen</span></h2>
+            <div class="form-row single">
+                <div>
+                    <label data-i18n="lbl_paymethod">Zahlungsart</label>
+                    <select id="pay-method">
+                        <option value="58" selected data-i18n="opt_sepa">SEPA-Überweisung (58)</option>
+                        <option value="30" data-i18n="opt_transfer">Überweisung (30)</option>
+                        <option value="48" data-i18n="opt_debit">Lastschrift (48)</option>
+                        <option value="ZZZ" data-i18n="opt_other">Sonstige (ZZZ)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row single">
+                <div>
+                    <label>IBAN</label>
+                    <input type="text" id="pay-iban" placeholder="DE89 3704 0044 0532 0130 00">
+                </div>
+            </div>
+            <div class="form-row">
+                <div>
+                    <label>BIC</label>
+                    <input type="text" id="pay-bic" placeholder="COBADEFFXXX">
+                </div>
+                <div>
+                    <label data-i18n="lbl_bankname">Bank</label>
+                    <input type="text" id="pay-bank" placeholder="Commerzbank">
+                </div>
+            </div>
+            <div class="form-row single" id="skonto-section">
+                <div>
+                    <label data-i18n="lbl_skonto">Skonto (z.B. "2% bei Zahlung innerhalb 10 Tagen")</label>
+                    <input type="text" id="pay-skonto" placeholder="#SKONTO#TAGE=10#PROZENT=2.00#">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LINE ITEMS -->
+    <div class="items-section">
+        <h2>
+            <span><span data-i18n="items_title">Positionen</span></span>
+            <span style="font-size:0.75em;font-weight:400;color:var(--text-muted)" data-i18n="items_hint">(mind. 1 Position)</span>
+        </h2>
+        <div class="items-header">
+            <span data-i18n="col_desc">Beschreibung</span>
+            <span data-i18n="col_qty">Menge</span>
+            <span data-i18n="col_price">Einzelpreis</span>
+            <span data-i18n="col_tax">USt %</span>
+            <span></span>
+        </div>
+        <div id="line-items">
+            <!-- JS fills this -->
+        </div>
+        <button class="btn-add" onclick="addItem()" data-i18n="btn_add_item">+ Position hinzufügen</button>
+
+        <div class="totals-row">
+            <div class="total-item">
+                <div class="label" data-i18n="lbl_net">Netto</div>
+                <div class="value" id="total-net">0,00 €</div>
+            </div>
+            <div class="total-item">
+                <div class="label" data-i18n="lbl_tax_total">USt</div>
+                <div class="value" id="total-tax">0,00 €</div>
+            </div>
+            <div class="total-item grand">
+                <div class="label" data-i18n="lbl_gross">Brutto</div>
+                <div class="value" id="total-gross">0,00 €</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+        <button class="btn-primary" onclick="generateXML()" data-i18n="btn_generate">XRechnung generieren</button>
+        <button class="btn-secondary" onclick="downloadXML()" id="btn-download" data-i18n="btn_download" style="display:none">XML herunterladen</button>
+        <button class="btn-secondary" onclick="loadExample()" data-i18n="btn_example">Beispiel laden</button>
+        <button class="btn-secondary" onclick="clearForm()" data-i18n="btn_clear">Formular leeren</button>
+    </div>
+
+    <!-- XML PREVIEW -->
+    <div class="preview-section" id="preview-section">
+        <div class="preview-header">
+            <h2 data-i18n="preview_title">XML-Vorschau</h2>
+            <div class="preview-actions">
+                <button onclick="copyXML()" id="btn-copy" data-i18n="btn_copy">Kopieren</button>
+            </div>
+        </div>
+        <div id="xml-output"></div>
+    </div>
+
+    <!-- INFO -->
+    <div class="info-grid">
+        <div class="info-card">
+            <h3 data-i18n="info1_title">Was ist XRechnung?</h3>
+            <p data-i18n="info1_text">XRechnung ist der deutsche Standard für strukturierte elektronische Rechnungen, basierend auf der EU-Norm EN 16931. Ab 2027 müssen alle Unternehmen mit >800K€ Umsatz E-Rechnungen ausstellen.</p>
+        </div>
+        <div class="info-card">
+            <h3 data-i18n="info2_title">Wie funktioniert dieses Tool?</h3>
+            <p data-i18n="info2_text">Füllen Sie das Formular aus und klicken Sie auf "Generieren". Das Tool erstellt eine valide UBL 2.1 XML-Datei direkt in Ihrem Browser. Keine Daten verlassen Ihren Computer.</p>
+        </div>
+        <div class="info-card">
+            <h3 data-i18n="info3_title">Für wen ist das?</h3>
+            <p data-i18n="info3_text">Freelancer, Kleinunternehmer und KMUs, die schnell und unkompliziert eine E-Rechnung erstellen wollen — ohne teure Software oder Registrierung.</p>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <p data-i18n="footer">Erstellt von <a href="../index.html">Orange Digital</a>. Dieses Tool ist kostenlos und Open Source. Keine Garantie für steuerliche oder rechtliche Korrektheit — bitte prüfen Sie das erzeugte XML mit einem offiziellen Validator.</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// INTERNATIONALIZATION
+// ============================================================
+const i18n = {
+  de: {
+    nav_back: 'Zurück zum Shop',
+    hero_title: '<span>XRechnung</span> Generator',
+    hero_desc: 'E-Rechnung erstellen — kostenlos, im Browser, ohne Registrierung. Konform mit EN 16931 und CIUS-DE.',
+    badge_free: '100% Kostenlos',
+    badge_privacy: 'Keine Daten werden gesendet',
+    badge_standard: 'UBL 2.1 / EN 16931',
+    badge_lang: 'Deutsch + English',
+    seller_title: 'Verkäufer / Rechnungssteller',
+    buyer_title: 'Käufer / Rechnungsempfänger',
+    invoice_title: 'Rechnungsdetails',
+    payment_title: 'Zahlungsinformationen',
+    lbl_company: 'Firmenname <span class="req">*</span>',
+    lbl_street: 'Straße + Hausnummer <span class="req">*</span>',
+    lbl_zip: 'PLZ <span class="req">*</span>',
+    lbl_city: 'Ort <span class="req">*</span>',
+    lbl_country: 'Land',
+    lbl_vatid: 'USt-IdNr.',
+    lbl_taxnr: 'Steuernummer',
+    lbl_email: 'E-Mail',
+    lbl_contact: 'Ansprechpartner',
+    lbl_leitweg: 'Leitweg-ID <span style="font-weight:400;color:var(--text-muted)">(B2G)</span>',
+    lbl_buyer_email: 'E-Mail',
+    lbl_buyer_ref: 'Bestellreferenz (Buyer Reference) <span class="req">*</span>',
+    lbl_invnr: 'Rechnungsnummer <span class="req">*</span>',
+    lbl_invdate: 'Rechnungsdatum <span class="req">*</span>',
+    lbl_duedate: 'Fälligkeitsdatum',
+    lbl_currency: 'Währung',
+    lbl_invtype: 'Rechnungstyp',
+    opt_invoice: 'Rechnung (380)',
+    opt_credit: 'Gutschrift (381)',
+    opt_correction: 'Korrekturrechnung (384)',
+    lbl_note: 'Bemerkung / Zahlungsbedingungen',
+    lbl_paymethod: 'Zahlungsart',
+    opt_sepa: 'SEPA-Überweisung (58)',
+    opt_transfer: 'Überweisung (30)',
+    opt_debit: 'Lastschrift (48)',
+    opt_other: 'Sonstige (ZZZ)',
+    lbl_bankname: 'Bank',
+    lbl_skonto: 'Skonto (z.B. "2% bei Zahlung innerhalb 10 Tagen")',
+    items_title: 'Positionen',
+    items_hint: '(mind. 1 Position)',
+    col_desc: 'Beschreibung',
+    col_qty: 'Menge',
+    col_price: 'Einzelpreis',
+    col_tax: 'USt %',
+    btn_add_item: '+ Position hinzufügen',
+    lbl_net: 'Netto',
+    lbl_tax_total: 'USt',
+    lbl_gross: 'Brutto',
+    btn_generate: 'XRechnung generieren',
+    btn_download: 'XML herunterladen',
+    btn_example: 'Beispiel laden',
+    btn_clear: 'Formular leeren',
+    preview_title: 'XML-Vorschau',
+    btn_copy: 'Kopieren',
+    info1_title: 'Was ist XRechnung?',
+    info1_text: 'XRechnung ist der deutsche Standard für strukturierte elektronische Rechnungen, basierend auf der EU-Norm EN 16931. Ab 2027 müssen alle Unternehmen mit >800K€ Umsatz E-Rechnungen ausstellen.',
+    info2_title: 'Wie funktioniert dieses Tool?',
+    info2_text: 'Füllen Sie das Formular aus und klicken Sie auf "Generieren". Das Tool erstellt eine valide UBL 2.1 XML-Datei direkt in Ihrem Browser. Keine Daten verlassen Ihren Computer.',
+    info3_title: 'Für wen ist das?',
+    info3_text: 'Freelancer, Kleinunternehmer und KMUs, die schnell und unkompliziert eine E-Rechnung erstellen wollen — ohne teure Software oder Registrierung.',
+    footer: 'Erstellt von <a href="../index.html">Orange Digital</a>. Dieses Tool ist kostenlos und Open Source. Keine Garantie für steuerliche oder rechtliche Korrektheit — bitte prüfen Sie das erzeugte XML mit einem offiziellen Validator.',
+    toast_generated: 'XRechnung erfolgreich generiert!',
+    toast_copied: 'XML in die Zwischenablage kopiert!',
+    toast_downloaded: 'XML-Datei heruntergeladen!',
+    toast_cleared: 'Formular geleert.',
+    toast_error: 'Bitte füllen Sie alle Pflichtfelder aus.',
+    ph_desc: 'Leistungsbeschreibung',
+  },
+  en: {
+    nav_back: 'Back to Store',
+    hero_title: '<span>XRechnung</span> Generator',
+    hero_desc: 'Create e-invoices — free, in your browser, no signup. Compliant with EN 16931 and CIUS-DE (German standard).',
+    badge_free: '100% Free',
+    badge_privacy: 'No data sent anywhere',
+    badge_standard: 'UBL 2.1 / EN 16931',
+    badge_lang: 'Deutsch + English',
+    seller_title: 'Seller / Invoice Issuer',
+    buyer_title: 'Buyer / Invoice Recipient',
+    invoice_title: 'Invoice Details',
+    payment_title: 'Payment Information',
+    lbl_company: 'Company Name <span class="req">*</span>',
+    lbl_street: 'Street + Number <span class="req">*</span>',
+    lbl_zip: 'Postal Code <span class="req">*</span>',
+    lbl_city: 'City <span class="req">*</span>',
+    lbl_country: 'Country',
+    lbl_vatid: 'VAT ID',
+    lbl_taxnr: 'Tax Number',
+    lbl_email: 'Email',
+    lbl_contact: 'Contact Person',
+    lbl_leitweg: 'Leitweg-ID <span style="font-weight:400;color:var(--text-muted)">(B2G)</span>',
+    lbl_buyer_email: 'Email',
+    lbl_buyer_ref: 'Buyer Reference <span class="req">*</span>',
+    lbl_invnr: 'Invoice Number <span class="req">*</span>',
+    lbl_invdate: 'Invoice Date <span class="req">*</span>',
+    lbl_duedate: 'Due Date',
+    lbl_currency: 'Currency',
+    lbl_invtype: 'Invoice Type',
+    opt_invoice: 'Invoice (380)',
+    opt_credit: 'Credit Note (381)',
+    opt_correction: 'Correction Invoice (384)',
+    lbl_note: 'Note / Payment Terms',
+    lbl_paymethod: 'Payment Method',
+    opt_sepa: 'SEPA Transfer (58)',
+    opt_transfer: 'Bank Transfer (30)',
+    opt_debit: 'Direct Debit (48)',
+    opt_other: 'Other (ZZZ)',
+    lbl_bankname: 'Bank Name',
+    lbl_skonto: 'Discount (e.g. "2% if paid within 10 days")',
+    items_title: 'Line Items',
+    items_hint: '(at least 1 item)',
+    col_desc: 'Description',
+    col_qty: 'Quantity',
+    col_price: 'Unit Price',
+    col_tax: 'VAT %',
+    btn_add_item: '+ Add Line Item',
+    lbl_net: 'Net',
+    lbl_tax_total: 'VAT',
+    lbl_gross: 'Gross',
+    btn_generate: 'Generate XRechnung',
+    btn_download: 'Download XML',
+    btn_example: 'Load Example',
+    btn_clear: 'Clear Form',
+    preview_title: 'XML Preview',
+    btn_copy: 'Copy',
+    info1_title: 'What is XRechnung?',
+    info1_text: 'XRechnung is the German standard for structured electronic invoices, based on EU standard EN 16931. Starting 2027, all German businesses with >€800K turnover must issue e-invoices.',
+    info2_title: 'How does this tool work?',
+    info2_text: 'Fill in the form and click "Generate". The tool creates a valid UBL 2.1 XML file directly in your browser. No data leaves your computer.',
+    info3_title: 'Who is this for?',
+    info3_text: 'Freelancers, small businesses, and SMEs who want to quickly create an e-invoice — without expensive software or registration.',
+    footer: 'Built by <a href="../index.html">Orange Digital</a>. This tool is free and open source. No guarantee for tax or legal correctness — please validate the generated XML with an official validator.',
+    toast_generated: 'XRechnung generated successfully!',
+    toast_copied: 'XML copied to clipboard!',
+    toast_downloaded: 'XML file downloaded!',
+    toast_cleared: 'Form cleared.',
+    toast_error: 'Please fill in all required fields.',
+    ph_desc: 'Service description',
+  }
+};
+
+let currentLang = 'de';
+
+function toggleLang() {
+    currentLang = currentLang === 'de' ? 'en' : 'de';
+    document.getElementById('lang-btn').textContent = currentLang === 'de' ? 'EN' : 'DE';
+    document.documentElement.lang = currentLang;
+    applyI18n();
+}
+
+function applyI18n() {
+    const strings = i18n[currentLang];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (strings[key]) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = strings[key];
+            } else {
+                el.innerHTML = strings[key];
+            }
+        }
+    });
+    // Update page title
+    document.title = currentLang === 'de'
+        ? 'XRechnung Generator — Kostenlos E-Rechnung erstellen | Orange Digital'
+        : 'XRechnung Generator — Free E-Invoice Creator | Orange Digital';
+}
+
+// ============================================================
+// LINE ITEMS
+// ============================================================
+let itemCount = 0;
+
+function addItem(desc, qty, price, tax) {
+    itemCount++;
+    const id = itemCount;
+    const container = document.getElementById('line-items');
+    const div = document.createElement('div');
+    div.className = 'line-item';
+    div.id = 'item-' + id;
+    const phDesc = i18n[currentLang].ph_desc || 'Leistungsbeschreibung';
+    div.innerHTML =
+        '<input type="text" placeholder="' + phDesc + '" value="' + (desc || '') + '" data-field="desc">' +
+        '<input type="number" placeholder="1" value="' + (qty || '1') + '" min="0" step="any" data-field="qty">' +
+        '<input type="number" placeholder="0.00" value="' + (price || '') + '" min="0" step="0.01" data-field="price">' +
+        '<input type="number" placeholder="19" value="' + (tax !== undefined ? tax : '19') + '" min="0" step="0.01" data-field="tax">' +
+        '<button class="btn-remove" onclick="removeItem(' + id + ')">×</button>';
+    container.appendChild(div);
+    // Attach recalc listeners
+    div.querySelectorAll('input').forEach(inp => inp.addEventListener('input', recalcTotals));
+    recalcTotals();
+}
+
+function removeItem(id) {
+    const el = document.getElementById('item-' + id);
+    if (el) el.remove();
+    recalcTotals();
+}
+
+function getItems() {
+    const items = [];
+    document.querySelectorAll('.line-item').forEach(row => {
+        const desc = row.querySelector('[data-field="desc"]').value.trim();
+        const qty = parseFloat(row.querySelector('[data-field="qty"]').value) || 0;
+        const price = parseFloat(row.querySelector('[data-field="price"]').value) || 0;
+        const tax = parseFloat(row.querySelector('[data-field="tax"]').value) || 0;
+        items.push({ desc, qty, price, tax, lineTotal: qty * price });
+    });
+    return items;
+}
+
+function recalcTotals() {
+    const items = getItems();
+    const currency = document.getElementById('inv-currency').value;
+    const sym = { EUR: '€', USD: '$', GBP: '£', CHF: 'CHF' }[currency] || currency;
+
+    let net = 0, taxTotal = 0;
+    items.forEach(it => {
+        net += it.lineTotal;
+        taxTotal += it.lineTotal * (it.tax / 100);
+    });
+
+    const fmt = (v) => v.toFixed(2).replace('.', ',') + ' ' + sym;
+    document.getElementById('total-net').textContent = fmt(net);
+    document.getElementById('total-tax').textContent = fmt(taxTotal);
+    document.getElementById('total-gross').textContent = fmt(net + taxTotal);
+}
+
+// ============================================================
+// XML GENERATION (UBL 2.1 / XRechnung / EN 16931 CIUS-DE)
+// ============================================================
+
+function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function val(id) { return document.getElementById(id).value.trim(); }
+
+function generateXML() {
+    // Validate required fields
+    const required = [
+        'seller-name', 'seller-street', 'seller-zip', 'seller-city',
+        'buyer-name', 'buyer-street', 'buyer-zip', 'buyer-city',
+        'inv-number', 'inv-date', 'buyer-ref'
+    ];
+    for (const id of required) {
+        if (!val(id)) {
+            showToast(i18n[currentLang].toast_error, true);
+            document.getElementById(id).focus();
+            document.getElementById(id).style.borderColor = 'var(--red)';
+            setTimeout(() => document.getElementById(id).style.borderColor = '', 2000);
+            return;
+        }
+    }
+
+    const items = getItems();
+    if (items.length === 0 || !items.some(i => i.desc)) {
+        showToast(i18n[currentLang].toast_error, true);
+        return;
+    }
+
+    const currency = val('inv-currency');
+    const invDate = val('inv-date');
+    const dueDate = val('inv-due-date');
+    const invType = val('inv-type');
+    const iban = val('pay-iban').replace(/\s/g, '');
+    const bic = val('pay-bic');
+    const bankName = val('pay-bank');
+    const payMethod = val('pay-method');
+    const note = val('inv-note');
+    const skonto = val('pay-skonto');
+
+    // Calculate totals grouped by tax rate
+    const taxGroups = {};
+    let netTotal = 0;
+    items.forEach(it => {
+        if (!it.desc) return;
+        const rate = it.tax;
+        if (!taxGroups[rate]) taxGroups[rate] = { taxable: 0, tax: 0 };
+        taxGroups[rate].taxable += it.lineTotal;
+        taxGroups[rate].tax += it.lineTotal * (rate / 100);
+        netTotal += it.lineTotal;
+    });
+
+    let taxTotal = 0;
+    Object.values(taxGroups).forEach(g => taxTotal += g.tax);
+    const grossTotal = netTotal + taxTotal;
+
+    // Build XML
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    xml += '<ubl:Invoice xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"\n';
+    xml += '             xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"\n';
+    xml += '             xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">\n';
+
+    // BT-24: Customization ID (CIUS-DE)
+    xml += '  <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0</cbc:CustomizationID>\n';
+    // BT-23: Profile ID
+    xml += '  <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>\n';
+    // BT-1: Invoice number
+    xml += '  <cbc:ID>' + esc(val('inv-number')) + '</cbc:ID>\n';
+    // BT-2: Invoice issue date
+    xml += '  <cbc:IssueDate>' + esc(invDate) + '</cbc:IssueDate>\n';
+    // BT-9: Due date
+    if (dueDate) {
+        xml += '  <cbc:DueDate>' + esc(dueDate) + '</cbc:DueDate>\n';
+    }
+    // BT-3: Invoice type code
+    xml += '  <cbc:InvoiceTypeCode>' + esc(invType) + '</cbc:InvoiceTypeCode>\n';
+    // BT-22: Note
+    if (note) {
+        xml += '  <cbc:Note>' + esc(note) + '</cbc:Note>\n';
+    }
+    // Skonto in note
+    if (skonto) {
+        xml += '  <cbc:Note>' + esc(skonto) + '</cbc:Note>\n';
+    }
+    // BT-5: Invoice currency code
+    xml += '  <cbc:DocumentCurrencyCode>' + esc(currency) + '</cbc:DocumentCurrencyCode>\n';
+    // BT-10: Buyer reference
+    xml += '  <cbc:BuyerReference>' + esc(val('buyer-ref')) + '</cbc:BuyerReference>\n';
+
+    // Seller (BG-4)
+    xml += '  <cac:AccountingSupplierParty>\n';
+    xml += '    <cac:Party>\n';
+    if (val('seller-email')) {
+        xml += '      <cbc:EndpointID schemeID="EM">' + esc(val('seller-email')) + '</cbc:EndpointID>\n';
+    }
+    xml += '      <cac:PartyName>\n';
+    xml += '        <cbc:Name>' + esc(val('seller-name')) + '</cbc:Name>\n';
+    xml += '      </cac:PartyName>\n';
+    xml += '      <cac:PostalAddress>\n';
+    xml += '        <cbc:StreetName>' + esc(val('seller-street')) + '</cbc:StreetName>\n';
+    xml += '        <cbc:CityName>' + esc(val('seller-city')) + '</cbc:CityName>\n';
+    xml += '        <cbc:PostalZone>' + esc(val('seller-zip')) + '</cbc:PostalZone>\n';
+    xml += '        <cac:Country>\n';
+    xml += '          <cbc:IdentificationCode>' + esc(val('seller-country')) + '</cbc:IdentificationCode>\n';
+    xml += '        </cac:Country>\n';
+    xml += '      </cac:PostalAddress>\n';
+    if (val('seller-vatid')) {
+        xml += '      <cac:PartyTaxScheme>\n';
+        xml += '        <cbc:CompanyID>' + esc(val('seller-vatid')) + '</cbc:CompanyID>\n';
+        xml += '        <cac:TaxScheme>\n';
+        xml += '          <cbc:ID>VAT</cbc:ID>\n';
+        xml += '        </cac:TaxScheme>\n';
+        xml += '      </cac:PartyTaxScheme>\n';
+    }
+    if (val('seller-taxnr')) {
+        xml += '      <cac:PartyTaxScheme>\n';
+        xml += '        <cbc:CompanyID>' + esc(val('seller-taxnr')) + '</cbc:CompanyID>\n';
+        xml += '        <cac:TaxScheme>\n';
+        xml += '          <cbc:ID>FC</cbc:ID>\n';
+        xml += '        </cac:TaxScheme>\n';
+        xml += '      </cac:PartyTaxScheme>\n';
+    }
+    xml += '      <cac:PartyLegalEntity>\n';
+    xml += '        <cbc:RegistrationName>' + esc(val('seller-name')) + '</cbc:RegistrationName>\n';
+    xml += '      </cac:PartyLegalEntity>\n';
+    if (val('seller-contact')) {
+        xml += '      <cac:Contact>\n';
+        xml += '        <cbc:Name>' + esc(val('seller-contact')) + '</cbc:Name>\n';
+        if (val('seller-email')) {
+            xml += '        <cbc:ElectronicMail>' + esc(val('seller-email')) + '</cbc:ElectronicMail>\n';
+        }
+        xml += '      </cac:Contact>\n';
+    }
+    xml += '    </cac:Party>\n';
+    xml += '  </cac:AccountingSupplierParty>\n';
+
+    // Buyer (BG-7)
+    xml += '  <cac:AccountingCustomerParty>\n';
+    xml += '    <cac:Party>\n';
+    if (val('buyer-email')) {
+        xml += '      <cbc:EndpointID schemeID="EM">' + esc(val('buyer-email')) + '</cbc:EndpointID>\n';
+    }
+    if (val('buyer-leitweg')) {
+        xml += '      <cbc:EndpointID schemeID="0204">' + esc(val('buyer-leitweg')) + '</cbc:EndpointID>\n';
+    }
+    xml += '      <cac:PartyName>\n';
+    xml += '        <cbc:Name>' + esc(val('buyer-name')) + '</cbc:Name>\n';
+    xml += '      </cac:PartyName>\n';
+    xml += '      <cac:PostalAddress>\n';
+    xml += '        <cbc:StreetName>' + esc(val('buyer-street')) + '</cbc:StreetName>\n';
+    xml += '        <cbc:CityName>' + esc(val('buyer-city')) + '</cbc:CityName>\n';
+    xml += '        <cbc:PostalZone>' + esc(val('buyer-zip')) + '</cbc:PostalZone>\n';
+    xml += '        <cac:Country>\n';
+    xml += '          <cbc:IdentificationCode>' + esc(val('buyer-country')) + '</cbc:IdentificationCode>\n';
+    xml += '        </cac:Country>\n';
+    xml += '      </cac:PostalAddress>\n';
+    if (val('buyer-vatid')) {
+        xml += '      <cac:PartyTaxScheme>\n';
+        xml += '        <cbc:CompanyID>' + esc(val('buyer-vatid')) + '</cbc:CompanyID>\n';
+        xml += '        <cac:TaxScheme>\n';
+        xml += '          <cbc:ID>VAT</cbc:ID>\n';
+        xml += '        </cac:TaxScheme>\n';
+        xml += '      </cac:PartyTaxScheme>\n';
+    }
+    xml += '      <cac:PartyLegalEntity>\n';
+    xml += '        <cbc:RegistrationName>' + esc(val('buyer-name')) + '</cbc:RegistrationName>\n';
+    xml += '      </cac:PartyLegalEntity>\n';
+    xml += '    </cac:Party>\n';
+    xml += '  </cac:AccountingCustomerParty>\n';
+
+    // Payment Means (BG-16)
+    xml += '  <cac:PaymentMeans>\n';
+    xml += '    <cbc:PaymentMeansCode>' + esc(payMethod) + '</cbc:PaymentMeansCode>\n';
+    if (iban) {
+        xml += '    <cac:PayeeFinancialAccount>\n';
+        xml += '      <cbc:ID>' + esc(iban) + '</cbc:ID>\n';
+        if (bankName) {
+            xml += '      <cbc:Name>' + esc(bankName) + '</cbc:Name>\n';
+        }
+        if (bic) {
+            xml += '      <cac:FinancialInstitutionBranch>\n';
+            xml += '        <cbc:ID>' + esc(bic) + '</cbc:ID>\n';
+            xml += '      </cac:FinancialInstitutionBranch>\n';
+        }
+        xml += '    </cac:PayeeFinancialAccount>\n';
+    }
+    xml += '  </cac:PaymentMeans>\n';
+
+    // Payment Terms (BT-20)
+    if (note || skonto) {
+        xml += '  <cac:PaymentTerms>\n';
+        xml += '    <cbc:Note>' + esc(skonto || note) + '</cbc:Note>\n';
+        xml += '  </cac:PaymentTerms>\n';
+    }
+
+    // Tax Total (BG-23)
+    xml += '  <cac:TaxTotal>\n';
+    xml += '    <cbc:TaxAmount currencyID="' + esc(currency) + '">' + taxTotal.toFixed(2) + '</cbc:TaxAmount>\n';
+    for (const [rate, group] of Object.entries(taxGroups)) {
+        const taxCatCode = parseFloat(rate) === 0 ? 'Z' : 'S';
+        xml += '    <cac:TaxSubtotal>\n';
+        xml += '      <cbc:TaxableAmount currencyID="' + esc(currency) + '">' + group.taxable.toFixed(2) + '</cbc:TaxableAmount>\n';
+        xml += '      <cbc:TaxAmount currencyID="' + esc(currency) + '">' + group.tax.toFixed(2) + '</cbc:TaxAmount>\n';
+        xml += '      <cac:TaxCategory>\n';
+        xml += '        <cbc:ID>' + taxCatCode + '</cbc:ID>\n';
+        xml += '        <cbc:Percent>' + parseFloat(rate).toFixed(2) + '</cbc:Percent>\n';
+        xml += '        <cac:TaxScheme>\n';
+        xml += '          <cbc:ID>VAT</cbc:ID>\n';
+        xml += '        </cac:TaxScheme>\n';
+        xml += '      </cac:TaxCategory>\n';
+        xml += '    </cac:TaxSubtotal>\n';
+    }
+    xml += '  </cac:TaxTotal>\n';
+
+    // Legal Monetary Total (BG-22)
+    xml += '  <cac:LegalMonetaryTotal>\n';
+    xml += '    <cbc:LineExtensionAmount currencyID="' + esc(currency) + '">' + netTotal.toFixed(2) + '</cbc:LineExtensionAmount>\n';
+    xml += '    <cbc:TaxExclusiveAmount currencyID="' + esc(currency) + '">' + netTotal.toFixed(2) + '</cbc:TaxExclusiveAmount>\n';
+    xml += '    <cbc:TaxInclusiveAmount currencyID="' + esc(currency) + '">' + grossTotal.toFixed(2) + '</cbc:TaxInclusiveAmount>\n';
+    xml += '    <cbc:PayableAmount currencyID="' + esc(currency) + '">' + grossTotal.toFixed(2) + '</cbc:PayableAmount>\n';
+    xml += '  </cac:LegalMonetaryTotal>\n';
+
+    // Invoice Lines (BG-25)
+    let lineNum = 0;
+    items.forEach(it => {
+        if (!it.desc) return;
+        lineNum++;
+        const lineNet = it.lineTotal;
+        const taxCatCode = it.tax === 0 ? 'Z' : 'S';
+        xml += '  <cac:InvoiceLine>\n';
+        xml += '    <cbc:ID>' + lineNum + '</cbc:ID>\n';
+        xml += '    <cbc:InvoicedQuantity unitCode="C62">' + it.qty.toString() + '</cbc:InvoicedQuantity>\n';
+        xml += '    <cbc:LineExtensionAmount currencyID="' + esc(currency) + '">' + lineNet.toFixed(2) + '</cbc:LineExtensionAmount>\n';
+        xml += '    <cac:Item>\n';
+        xml += '      <cbc:Name>' + esc(it.desc) + '</cbc:Name>\n';
+        xml += '      <cac:ClassifiedTaxCategory>\n';
+        xml += '        <cbc:ID>' + taxCatCode + '</cbc:ID>\n';
+        xml += '        <cbc:Percent>' + it.tax.toFixed(2) + '</cbc:Percent>\n';
+        xml += '        <cac:TaxScheme>\n';
+        xml += '          <cbc:ID>VAT</cbc:ID>\n';
+        xml += '        </cac:TaxScheme>\n';
+        xml += '      </cac:ClassifiedTaxCategory>\n';
+        xml += '    </cac:Item>\n';
+        xml += '    <cac:Price>\n';
+        xml += '      <cbc:PriceAmount currencyID="' + esc(currency) + '">' + it.price.toFixed(2) + '</cbc:PriceAmount>\n';
+        xml += '    </cac:Price>\n';
+        xml += '  </cac:InvoiceLine>\n';
+    });
+
+    xml += '</ubl:Invoice>';
+
+    // Display
+    document.getElementById('xml-output').textContent = xml;
+    document.getElementById('preview-section').classList.add('visible');
+    document.getElementById('btn-download').style.display = '';
+    showToast(i18n[currentLang].toast_generated);
+
+    // Scroll to preview
+    document.getElementById('preview-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Store for download
+    window._generatedXML = xml;
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+
+function downloadXML() {
+    if (!window._generatedXML) return;
+    const invNr = val('inv-number') || 'xrechnung';
+    const filename = invNr.replace(/[^a-zA-Z0-9\-_]/g, '_') + '.xml';
+    const blob = new Blob([window._generatedXML], { type: 'application/xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(i18n[currentLang].toast_downloaded);
+}
+
+function copyXML() {
+    if (!window._generatedXML) return;
+    navigator.clipboard.writeText(window._generatedXML).then(() => {
+        const btn = document.getElementById('btn-copy');
+        btn.classList.add('copied');
+        btn.textContent = currentLang === 'de' ? 'Kopiert!' : 'Copied!';
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.textContent = i18n[currentLang].btn_copy;
+        }, 2000);
+    });
+}
+
+function clearForm() {
+    document.querySelectorAll('input:not([type="date"]), textarea').forEach(el => el.value = '');
+    document.querySelectorAll('input[type="date"]').forEach(el => el.value = '');
+    document.getElementById('line-items').innerHTML = '';
+    itemCount = 0;
+    addItem();
+    document.getElementById('preview-section').classList.remove('visible');
+    document.getElementById('btn-download').style.display = 'none';
+    window._generatedXML = null;
+    recalcTotals();
+    showToast(i18n[currentLang].toast_cleared);
+}
+
+function loadExample() {
+    document.getElementById('seller-name').value = 'Webdesign Müller GmbH';
+    document.getElementById('seller-street').value = 'Berliner Str. 42';
+    document.getElementById('seller-zip').value = '10115';
+    document.getElementById('seller-city').value = 'Berlin';
+    document.getElementById('seller-country').value = 'DE';
+    document.getElementById('seller-vatid').value = 'DE123456789';
+    document.getElementById('seller-taxnr').value = '30/123/45678';
+    document.getElementById('seller-email').value = 'rechnung@webdesign-mueller.de';
+    document.getElementById('seller-contact').value = 'Lisa Müller';
+
+    document.getElementById('buyer-name').value = 'Stadtverwaltung Musterstadt';
+    document.getElementById('buyer-street').value = 'Rathausplatz 1';
+    document.getElementById('buyer-zip').value = '80331';
+    document.getElementById('buyer-city').value = 'München';
+    document.getElementById('buyer-country').value = 'DE';
+    document.getElementById('buyer-leitweg').value = '991-12345-67';
+    document.getElementById('buyer-email').value = 'einkauf@musterstadt.de';
+    document.getElementById('buyer-ref').value = '991-12345-67';
+
+    document.getElementById('inv-number').value = 'RE-2026-042';
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('inv-date').value = today;
+    const due = new Date(Date.now() + 30*86400000).toISOString().split('T')[0];
+    document.getElementById('inv-due-date').value = due;
+    document.getElementById('inv-currency').value = 'EUR';
+    document.getElementById('inv-type').value = '380';
+    document.getElementById('inv-note').value = 'Zahlbar innerhalb von 30 Tagen netto.';
+
+    document.getElementById('pay-method').value = '58';
+    document.getElementById('pay-iban').value = 'DE89 3704 0044 0532 0130 00';
+    document.getElementById('pay-bic').value = 'COBADEFFXXX';
+    document.getElementById('pay-bank').value = 'Commerzbank';
+
+    // Clear existing items and add example items
+    document.getElementById('line-items').innerHTML = '';
+    itemCount = 0;
+    addItem('Website-Redesign — Konzept & Wireframes', '1', '2500.00', '19');
+    addItem('Frontend-Entwicklung (React)', '40', '95.00', '19');
+    addItem('SEO-Optimierung Paket', '1', '450.00', '19');
+
+    recalcTotals();
+}
+
+function showToast(msg, isError) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.style.background = isError ? 'var(--red)' : 'var(--green)';
+    toast.classList.add('visible');
+    setTimeout(() => toast.classList.remove('visible'), 3000);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+(function init() {
+    // Set today's date
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('inv-date').value = today;
+    // Add one empty item
+    addItem();
+    // Currency change triggers recalc
+    document.getElementById('inv-currency').addEventListener('change', recalcTotals);
+})();
+</script>
+</body>
+</html>
