@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Cron Expression Generator — Build & Parse Crontab Schedules | Orange Digital</title>
+    <meta name="description" content="Build cron expressions visually with our free generator. Parse crontab syntax, see next run times, copy-paste ready. No signup, no tracking.">
+    <meta name="keywords" content="cron generator, cron expression builder, crontab generator, cron parser, cron schedule, crontab syntax, cron job">
+    <meta property="og:title" content="Free Cron Expression Generator — Build & Parse Crontab Schedules">
+    <meta property="og:description" content="Build cron expressions visually with our free generator. Parse crontab syntax, see next run times, copy-paste ready. No signup, no tracking.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://the-tangerine-agent.github.io/orange-digital/tools/cron.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free Cron Expression Generator — Orange Digital">
+    <meta name="twitter:description" content="Build cron expressions visually. Parse crontab syntax, see next run times. 100% browser-based.">
+    <link rel="canonical" href="https://the-tangerine-agent.github.io/orange-digital/tools/cron.html">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Cron Expression Generator",
+      "description": "Free browser-based cron expression generator and parser. Build crontab schedules visually, see next run times, copy-paste ready.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (browser-based)",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "creator": { "@type": "Organization", "name": "Orange Digital" }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-hover: #1a1a25;
+            --border: #ffffff12;
+            --text: #e8e8ed;
+            --text-muted: #8888a0;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --accent-glow: #6366f120;
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --radius: 12px;
+            --field-minute: #6366f1;
+            --field-hour: #22c55e;
+            --field-dom: #f59e0b;
+            --field-month: #ec4899;
+            --field-dow: #06b6d4;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: #0a0a0fdd; backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); padding: 0 24px;
+        }
+        .nav-inner {
+            max-width: 1000px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; height: 64px;
+        }
+        .logo { font-weight: 800; font-size: 1.1rem; color: var(--accent); text-decoration: none; }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 96px 24px 40px; }
+
+        h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.03em; }
+        h1 .accent { color: var(--accent); }
+        .tagline { color: var(--text-muted); margin-bottom: 32px; font-size: 1rem; }
+
+        /* Expression Input */
+        .expression-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 28px; margin-bottom: 24px;
+        }
+        .expression-input-wrap {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+        }
+        .expression-input {
+            flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 1.8rem; font-weight: 500;
+            background: var(--bg); border: 2px solid var(--border); border-radius: 8px;
+            color: var(--text); padding: 16px 20px; text-align: center;
+            letter-spacing: 0.1em; transition: border-color 0.2s;
+        }
+        .expression-input:focus { outline: none; border-color: var(--accent); }
+        .expression-input.invalid { border-color: var(--red); }
+        .copy-btns { display: flex; gap: 8px; flex-shrink: 0; }
+        .btn {
+            font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600;
+            padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border);
+            background: var(--surface-hover); color: var(--text); cursor: pointer;
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .btn.copied { background: var(--green); border-color: var(--green); color: #fff; }
+
+        .human-readable {
+            font-size: 1.1rem; color: var(--text); text-align: center;
+            min-height: 28px; margin-bottom: 16px;
+        }
+        .human-readable .emoji { margin-right: 6px; }
+
+        .field-labels {
+            display: flex; justify-content: center; gap: 0; margin-top: 4px;
+        }
+        .field-label {
+            display: flex; flex-direction: column; align-items: center;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; min-width: 80px;
+        }
+        .field-label .dot {
+            width: 8px; height: 8px; border-radius: 50%; margin-bottom: 4px;
+        }
+
+        /* Quick Presets */
+        .presets-section { margin-bottom: 24px; }
+        .section-title {
+            font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 12px;
+        }
+        .presets-grid {
+            display: flex; flex-wrap: wrap; gap: 8px;
+        }
+        .preset-btn {
+            font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 500;
+            padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border);
+            background: var(--surface); color: var(--text-muted); cursor: pointer;
+            transition: all 0.2s;
+        }
+        .preset-btn:hover { background: var(--surface-hover); color: var(--text); border-color: var(--accent); }
+        .preset-btn .preset-expr {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+            color: var(--accent); display: block; margin-top: 2px;
+        }
+
+        /* Visual Builder */
+        .builder-section { margin-bottom: 24px; }
+        .builder-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+        .builder-card:hover { border-color: #ffffff20; }
+        .builder-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .builder-title {
+            font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 8px;
+        }
+        .builder-title .color-dot {
+            width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+        }
+        .builder-current {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            color: var(--text-muted); background: var(--bg); padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .mode-selector {
+            display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
+        }
+        .mode-btn {
+            font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
+            padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border);
+            background: transparent; color: var(--text-muted); cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mode-btn:hover { color: var(--text); border-color: #ffffff30; }
+        .mode-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+        .interval-input {
+            display: flex; align-items: center; gap: 10px; padding: 8px 0;
+        }
+        .interval-input label { font-size: 0.85rem; color: var(--text-muted); }
+        .interval-input input[type="number"] {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+            width: 70px; padding: 6px 10px; border-radius: 6px;
+            border: 1px solid var(--border); background: var(--bg);
+            color: var(--text); text-align: center;
+        }
+        .interval-input input[type="number"]:focus { outline: none; border-color: var(--accent); }
+
+        .value-grid {
+            display: grid; gap: 4px;
+        }
+        .value-grid.minutes, .value-grid.hours { grid-template-columns: repeat(10, 1fr); }
+        .value-grid.dom { grid-template-columns: repeat(7, 1fr); }
+        .value-grid.months { grid-template-columns: repeat(6, 1fr); }
+        .value-grid.dow { grid-template-columns: repeat(7, 1fr); }
+
+        .grid-cell {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+            padding: 8px 4px; text-align: center; border-radius: 6px;
+            border: 1px solid var(--border); background: var(--bg);
+            color: var(--text-muted); cursor: pointer; transition: all 0.15s;
+            user-select: none;
+        }
+        .grid-cell:hover { border-color: #ffffff30; color: var(--text); background: var(--surface-hover); }
+        .grid-cell.selected { color: #fff; border-color: transparent; }
+        .grid-cell.selected.minute-color { background: var(--field-minute); }
+        .grid-cell.selected.hour-color { background: var(--field-hour); }
+        .grid-cell.selected.dom-color { background: var(--field-dom); }
+        .grid-cell.selected.month-color { background: var(--field-month); }
+        .grid-cell.selected.dow-color { background: var(--field-dow); }
+        .grid-cell .sub { font-family: 'Inter', sans-serif; font-size: 0.6rem; display: block; color: var(--text-muted); margin-top: 1px; }
+        .grid-cell.selected .sub { color: rgba(255,255,255,0.7); }
+
+        .special-option {
+            display: flex; align-items: center; gap: 8px; margin-top: 10px;
+        }
+        .special-option input[type="checkbox"] {
+            width: 16px; height: 16px; accent-color: var(--accent);
+        }
+        .special-option label { font-size: 0.85rem; color: var(--text-muted); cursor: pointer; }
+
+        /* Next Runs */
+        .next-runs-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 20px; margin-bottom: 24px;
+        }
+        .next-runs-list { list-style: none; }
+        .next-runs-list li {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+        .next-runs-list li:last-child { border-bottom: none; }
+        .run-time {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            color: var(--text);
+        }
+        .run-relative {
+            font-size: 0.8rem; color: var(--text-muted);
+        }
+        .run-index {
+            font-size: 0.75rem; color: var(--text-muted); font-weight: 600;
+            width: 24px; flex-shrink: 0;
+        }
+        .timezone-note {
+            font-size: 0.75rem; color: var(--text-muted); margin-top: 10px;
+            text-align: center;
+        }
+
+        /* Reference */
+        .reference-section { margin-bottom: 40px; }
+        .reference-toggle {
+            font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            background: none; border: none; color: var(--text-muted); cursor: pointer;
+            display: flex; align-items: center; gap: 8px; padding: 8px 0;
+            transition: color 0.2s; width: 100%;
+        }
+        .reference-toggle:hover { color: var(--text); }
+        .reference-toggle .arrow { transition: transform 0.2s; font-size: 0.7rem; }
+        .reference-toggle.open .arrow { transform: rotate(90deg); }
+        .reference-content {
+            max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
+        }
+        .reference-content.open { max-height: 800px; }
+        .ref-table {
+            width: 100%; border-collapse: collapse; margin-top: 12px;
+            font-size: 0.85rem;
+        }
+        .ref-table th {
+            text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border);
+            color: var(--text-muted); font-weight: 600; font-size: 0.78rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .ref-table td {
+            padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text);
+        }
+        .ref-table code {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+            background: var(--bg); padding: 2px 6px; border-radius: 4px;
+            color: var(--accent);
+        }
+        .ref-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px;
+        }
+        .ref-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; padding: 14px;
+        }
+        .ref-card h4 { font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; color: var(--accent); }
+        .ref-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+
+        /* Footer */
+        footer {
+            text-align: center; padding: 40px 24px; margin-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted); font-size: 0.85rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+            background: var(--green); color: #fff; padding: 10px 20px; border-radius: 8px;
+            font-size: 0.85rem; font-weight: 600; opacity: 0; transition: all 0.3s;
+            pointer-events: none; z-index: 200;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .expression-input { font-size: 1.2rem; padding: 12px 10px; letter-spacing: 0.05em; }
+            .expression-input-wrap { flex-direction: column; }
+            .copy-btns { width: 100%; justify-content: center; }
+            .value-grid.minutes, .value-grid.hours { grid-template-columns: repeat(6, 1fr); }
+            .value-grid.dom { grid-template-columns: repeat(7, 1fr); }
+            .ref-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.5rem; }
+            .field-labels { flex-wrap: wrap; gap: 4px; }
+            .field-label { min-width: 60px; font-size: 0.6rem; }
+        }
+        @media (max-width: 480px) {
+            .value-grid.minutes, .value-grid.hours { grid-template-columns: repeat(5, 1fr); }
+            .presets-grid { gap: 6px; }
+            .preset-btn { padding: 6px 10px; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="../" class="logo">&#127818; Orange Digital</a>
+            <div class="nav-links">
+                <a href="../index.html#free-tools">&larr; All Tools</a>
+                <a href="../index.html#products">Products</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Cron Expression <span class="accent">Generator</span></h1>
+        <p class="tagline">Build, parse, and understand cron schedules visually. See next run times instantly.</p>
+
+        <!-- Expression Input -->
+        <div class="expression-card">
+            <div class="expression-input-wrap">
+                <input type="text" id="cronInput" class="expression-input" value="0 */2 * * *" spellcheck="false" autocomplete="off">
+                <div class="copy-btns">
+                    <button class="btn" id="copyExpr" title="Copy expression">Copy</button>
+                    <button class="btn" id="copyCrontab" title="Copy as crontab line">Crontab</button>
+                </div>
+            </div>
+            <div class="human-readable" id="humanReadable"></div>
+            <div class="field-labels">
+                <div class="field-label"><div class="dot" style="background:var(--field-minute)"></div>Minute</div>
+                <div class="field-label"><div class="dot" style="background:var(--field-hour)"></div>Hour</div>
+                <div class="field-label"><div class="dot" style="background:var(--field-dom)"></div>Day (Month)</div>
+                <div class="field-label"><div class="dot" style="background:var(--field-month)"></div>Month</div>
+                <div class="field-label"><div class="dot" style="background:var(--field-dow)"></div>Day (Week)</div>
+            </div>
+        </div>
+
+        <!-- Quick Presets -->
+        <div class="presets-section">
+            <div class="section-title">Quick Presets</div>
+            <div class="presets-grid" id="presetsGrid"></div>
+        </div>
+
+        <!-- Visual Builder -->
+        <div class="builder-section">
+            <div class="section-title">Visual Builder</div>
+            <div id="builderCards"></div>
+        </div>
+
+        <!-- Next Runs -->
+        <div class="next-runs-card">
+            <div class="section-title" style="margin-bottom:14px">Next 10 Runs</div>
+            <ul class="next-runs-list" id="nextRunsList"></ul>
+            <div class="timezone-note" id="tzNote"></div>
+        </div>
+
+        <!-- Cron Syntax Reference -->
+        <div class="reference-section">
+            <button class="reference-toggle" id="refToggle">
+                <span class="arrow">&#9654;</span> Cron Syntax Reference
+            </button>
+            <div class="reference-content" id="refContent">
+                <div class="ref-grid">
+                    <div class="ref-card">
+                        <h4>Field Ranges</h4>
+                        <p>
+                            Minute: <code>0-59</code><br>
+                            Hour: <code>0-23</code><br>
+                            Day of Month: <code>1-31</code><br>
+                            Month: <code>1-12</code><br>
+                            Day of Week: <code>0-7</code> (0 &amp; 7 = Sun)
+                        </p>
+                    </div>
+                    <div class="ref-card">
+                        <h4>Special Characters</h4>
+                        <p>
+                            <code>*</code> &mdash; any value<br>
+                            <code>,</code> &mdash; value list (1,3,5)<br>
+                            <code>-</code> &mdash; range (1-5)<br>
+                            <code>/</code> &mdash; step (*/5 = every 5)
+                        </p>
+                    </div>
+                </div>
+                <table class="ref-table" style="margin-top:16px">
+                    <thead>
+                        <tr><th>Expression</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>* * * * *</code></td><td>Every minute</td></tr>
+                        <tr><td><code>*/5 * * * *</code></td><td>Every 5 minutes</td></tr>
+                        <tr><td><code>0 * * * *</code></td><td>Every hour (at minute 0)</td></tr>
+                        <tr><td><code>0 0 * * *</code></td><td>Every day at midnight</td></tr>
+                        <tr><td><code>0 9 * * 1-5</code></td><td>Weekdays at 9:00 AM</td></tr>
+                        <tr><td><code>0 0 1 * *</code></td><td>First day of every month</td></tr>
+                        <tr><td><code>30 4 1,15 * *</code></td><td>4:30 AM on 1st and 15th</td></tr>
+                        <tr><td><code>0 */6 * * *</code></td><td>Every 6 hours</td></tr>
+                        <tr><td><code>0 0 * * 0</code></td><td>Every Sunday at midnight</td></tr>
+                        <tr><td><code>0 8-17 * * 1-5</code></td><td>Every hour 8AM-5PM, weekdays</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Built by <a href="../">Orange Digital</a> &mdash; Free, forever. No tracking. No signup.
+    </footer>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+    (function() {
+        'use strict';
+
+        // ===== Constants =====
+        const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const DOW_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        const FIELD_COLORS = ['minute-color','hour-color','dom-color','month-color','dow-color'];
+        const FIELD_LABELS = ['Minute','Hour','Day of Month','Month','Day of Week'];
+        const FIELD_RANGES = [[0,59],[0,23],[1,31],[1,12],[0,6]];
+
+        const PRESETS = [
+            { label: 'Every minute', expr: '* * * * *' },
+            { label: 'Every 5 minutes', expr: '*/5 * * * *' },
+            { label: 'Every hour', expr: '0 * * * *' },
+            { label: 'Every day at midnight', expr: '0 0 * * *' },
+            { label: 'Every Monday at 9am', expr: '0 9 * * 1' },
+            { label: 'First of month', expr: '0 0 1 * *' },
+            { label: 'Weekdays at 9am', expr: '0 9 * * 1-5' },
+            { label: 'Every Sunday at 3am', expr: '0 3 * * 0' },
+        ];
+
+        const FIELDS = [
+            { key: 'minute', label: 'Minute', range: [0,59], color: 'var(--field-minute)', colorClass: 'minute-color',
+              modes: ['every','interval','specific'], gridClass: 'minutes',
+              modeLabels: ['Every minute','Every N minutes','Specific minutes'] },
+            { key: 'hour', label: 'Hour', range: [0,23], color: 'var(--field-hour)', colorClass: 'hour-color',
+              modes: ['every','interval','specific'], gridClass: 'hours',
+              modeLabels: ['Every hour','Every N hours','Specific hours'] },
+            { key: 'dom', label: 'Day of Month', range: [1,31], color: 'var(--field-dom)', colorClass: 'dom-color',
+              modes: ['every','interval','specific'], gridClass: 'dom',
+              modeLabels: ['Every day','Every N days','Specific days'] },
+            { key: 'month', label: 'Month', range: [1,12], color: 'var(--field-month)', colorClass: 'month-color',
+              modes: ['every','interval','specific'], gridClass: 'months',
+              modeLabels: ['Every month','Every N months','Specific months'] },
+            { key: 'dow', label: 'Day of Week', range: [0,6], color: 'var(--field-dow)', colorClass: 'dow-color',
+              modes: ['every','specific'], gridClass: 'dow',
+              modeLabels: ['Every day','Specific days'] },
+        ];
+
+        // ===== State =====
+        let builderState = {
+            minute: { mode: 'every', interval: 1, selected: new Set() },
+            hour:   { mode: 'every', interval: 1, selected: new Set() },
+            dom:    { mode: 'every', interval: 1, selected: new Set() },
+            month:  { mode: 'every', interval: 1, selected: new Set() },
+            dow:    { mode: 'every', selected: new Set() },
+        };
+        let updatingFromInput = false;
+        let updatingFromBuilder = false;
+
+        // ===== DOM refs =====
+        const cronInput = document.getElementById('cronInput');
+        const humanReadable = document.getElementById('humanReadable');
+        const nextRunsList = document.getElementById('nextRunsList');
+        const tzNote = document.getElementById('tzNote');
+
+        // ===== Cron Parser =====
+        function parseField(field, min, max) {
+            // Returns sorted array of matching values, or null if invalid
+            const values = new Set();
+            const parts = field.split(',');
+            for (const part of parts) {
+                if (!expandPart(part.trim(), min, max, values)) return null;
+            }
+            const arr = [...values].filter(v => v >= min && v <= max).sort((a,b) => a - b);
+            return arr.length > 0 ? arr : null;
+        }
+
+        function expandPart(part, min, max, values) {
+            // *
+            if (part === '*') {
+                for (let i = min; i <= max; i++) values.add(i);
+                return true;
+            }
+            // */N
+            let m = part.match(/^\*\/(\d+)$/);
+            if (m) {
+                const step = parseInt(m[1]);
+                if (step < 1) return false;
+                for (let i = min; i <= max; i += step) values.add(i);
+                return true;
+            }
+            // N-M/S
+            m = part.match(/^(\d+)-(\d+)\/(\d+)$/);
+            if (m) {
+                const start = parseInt(m[1]), end = parseInt(m[2]), step = parseInt(m[3]);
+                if (start > end || step < 1) return false;
+                for (let i = start; i <= end && i <= max; i += step) values.add(i);
+                return true;
+            }
+            // N-M
+            m = part.match(/^(\d+)-(\d+)$/);
+            if (m) {
+                const start = parseInt(m[1]), end = parseInt(m[2]);
+                if (start > end) return false;
+                for (let i = start; i <= end && i <= max; i++) values.add(i);
+                return true;
+            }
+            // N
+            m = part.match(/^(\d+)$/);
+            if (m) {
+                values.add(parseInt(m[1]));
+                return true;
+            }
+            return false;
+        }
+
+        function parseCron(expr) {
+            const parts = expr.trim().split(/\s+/);
+            if (parts.length !== 5) return null;
+            const minute = parseField(parts[0], 0, 59);
+            const hour = parseField(parts[1], 0, 23);
+            const dom = parseField(parts[2], 1, 31);
+            const month = parseField(parts[3], 1, 12);
+            // Handle 7 as Sunday
+            let dowField = parts[4].replace(/\b7\b/g, '0');
+            const dow = parseField(dowField, 0, 6);
+            if (!minute || !hour || !dom || !month || !dow) return null;
+            return { minute, hour, dom, month, dow, raw: parts };
+        }
+
+        // ===== Human Readable Description =====
+        function describeField(part) { return part; }
+
+        function describeCron(expr) {
+            const parts = expr.trim().split(/\s+/);
+            if (parts.length !== 5) return 'Invalid expression';
+            const [min, hr, dom, mon, dow] = parts;
+
+            let desc = [];
+
+            // Simple common patterns first
+            if (expr === '* * * * *') return 'Every minute';
+            if (min.match(/^\*\/(\d+)$/) && hr === '*' && dom === '*' && mon === '*' && dow === '*') {
+                const n = min.match(/^\*\/(\d+)$/)[1];
+                return n === '1' ? 'Every minute' : `Every ${n} minutes`;
+            }
+            if (hr.match(/^\*\/(\d+)$/) && min === '0' && dom === '*' && mon === '*' && dow === '*') {
+                const n = hr.match(/^\*\/(\d+)$/)[1];
+                return n === '1' ? 'Every hour' : `Every ${n} hours`;
+            }
+
+            // Time part
+            let timePart = '';
+            if (min === '0' && hr === '0') timePart = 'At midnight';
+            else if (min === '0' && hr === '12') timePart = 'At noon';
+            else if (min === '0' && hr === '*') timePart = 'Every hour';
+            else if (min === '*' && hr === '*') timePart = 'Every minute';
+            else if (min === '0' && hr.match(/^\d+$/)) {
+                const h = parseInt(hr);
+                timePart = `At ${formatHour(h)}`;
+            } else if (min.match(/^\d+$/) && hr.match(/^\d+$/)) {
+                const h = parseInt(hr), m = parseInt(min);
+                timePart = `At ${formatHour(h)}:${m.toString().padStart(2,'0')}`;
+            } else if (min.match(/^\d+$/) && hr === '*') {
+                timePart = `At minute ${min} of every hour`;
+            } else if (min === '*') {
+                timePart = 'Every minute';
+                if (hr !== '*') timePart += ` during hour${describeValues(hr, 0, 23)}`;
+            } else if (min === '0') {
+                timePart = `Every hour`;
+                if (hr !== '*') {
+                    const hvals = describeValues(hr, 0, 23);
+                    timePart = `At ${hvals}`;
+                }
+            } else {
+                timePart = `Minute ${min}`;
+                if (hr !== '*') timePart += `, hour ${hr}`;
+            }
+
+            desc.push(timePart);
+
+            // Day part
+            if (dom !== '*' && dow !== '*') {
+                desc.push(`on day ${dom} of the month and ${describeDow(dow)}`);
+            } else if (dom !== '*') {
+                desc.push(`on day ${dom} of the month`);
+            } else if (dow !== '*') {
+                desc.push(`on ${describeDow(dow)}`);
+            }
+
+            // Month
+            if (mon !== '*') {
+                desc.push(`in ${describeMonths(mon)}`);
+            }
+
+            return desc.join(', ');
+        }
+
+        function formatHour(h) {
+            if (h === 0) return '12:00 AM';
+            if (h === 12) return '12:00 PM';
+            if (h < 12) return `${h}:00 AM`;
+            return `${h-12}:00 PM`;
+        }
+
+        function describeValues(part, min, max) {
+            return part;
+        }
+
+        function describeDow(dow) {
+            const parsed = parseField(dow.replace(/\b7\b/g,'0'), 0, 6);
+            if (!parsed) return dow;
+            if (parsed.length === 5 && parsed.join(',') === '1,2,3,4,5') return 'weekdays';
+            if (parsed.length === 2 && parsed.join(',') === '0,6') return 'weekends';
+            return parsed.map(d => DOW_NAMES[d]).join(', ');
+        }
+
+        function describeMonths(mon) {
+            const parsed = parseField(mon, 1, 12);
+            if (!parsed) return mon;
+            return parsed.map(m => MONTH_NAMES[m-1]).join(', ');
+        }
+
+        // ===== Next Runs Calculator =====
+        function getNextRuns(expr, count) {
+            const cron = parseCron(expr);
+            if (!cron) return [];
+            const runs = [];
+            const now = new Date();
+            let d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes() + 1, 0, 0);
+            const maxIter = 525960; // ~1 year of minutes
+            let iter = 0;
+
+            while (runs.length < count && iter < maxIter) {
+                iter++;
+                const minute = d.getMinutes();
+                const hour = d.getHours();
+                const dayOfMonth = d.getDate();
+                const month = d.getMonth() + 1;
+                const dayOfWeek = d.getDay();
+
+                // Check month first for early skip
+                if (!cron.month.includes(month)) {
+                    // Skip to first day of next matching month
+                    let nm = month;
+                    let ny = d.getFullYear();
+                    let found = false;
+                    for (let i = 0; i < 12; i++) {
+                        nm++;
+                        if (nm > 12) { nm = 1; ny++; }
+                        if (cron.month.includes(nm)) { found = true; break; }
+                    }
+                    if (!found) break;
+                    d = new Date(ny, nm - 1, 1, 0, 0, 0, 0);
+                    continue;
+                }
+
+                // Check day of month and day of week
+                if (!cron.dom.includes(dayOfMonth) || !cron.dow.includes(dayOfWeek)) {
+                    d = new Date(d.getTime() + 86400000);
+                    d.setHours(0, 0, 0, 0);
+                    continue;
+                }
+
+                // Check hour
+                if (!cron.hour.includes(hour)) {
+                    // Skip to next matching hour
+                    let nextH = cron.hour.find(h => h > hour);
+                    if (nextH !== undefined) {
+                        d.setHours(nextH, 0, 0, 0);
+                    } else {
+                        // Next day
+                        d = new Date(d.getTime() + 86400000);
+                        d.setHours(0, 0, 0, 0);
+                    }
+                    continue;
+                }
+
+                // Check minute
+                if (!cron.minute.includes(minute)) {
+                    let nextM = cron.minute.find(m => m > minute);
+                    if (nextM !== undefined) {
+                        d.setMinutes(nextM, 0, 0);
+                    } else {
+                        // Next hour
+                        d = new Date(d.getTime() + 3600000);
+                        d.setMinutes(0, 0, 0);
+                    }
+                    continue;
+                }
+
+                // Match!
+                runs.push(new Date(d));
+                d = new Date(d.getTime() + 60000);
+            }
+            return runs;
+        }
+
+        function formatRelative(date) {
+            const now = new Date();
+            const diff = date.getTime() - now.getTime();
+            const mins = Math.round(diff / 60000);
+            if (mins < 1) return 'less than a minute';
+            if (mins < 60) return `in ${mins} min`;
+            const hrs = Math.floor(mins / 60);
+            const rmins = mins % 60;
+            if (hrs < 24) {
+                if (rmins === 0) return `in ${hrs}h`;
+                return `in ${hrs}h ${rmins}m`;
+            }
+            const days = Math.floor(hrs / 24);
+            if (days === 1) return 'tomorrow';
+            if (days < 7) return `in ${days} days`;
+            if (days < 30) return `in ${Math.floor(days/7)} weeks`;
+            return `in ${Math.floor(days/30)} months`;
+        }
+
+        function formatDateTime(d) {
+            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            return `${days[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()} ${d.getFullYear()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+        }
+
+        // ===== Builder → Expression =====
+        function builderToExpression() {
+            const parts = FIELDS.map(f => {
+                const state = builderState[f.key];
+                if (state.mode === 'every') return '*';
+                if (state.mode === 'interval') {
+                    const n = state.interval || 1;
+                    if (n === 1) return '*';
+                    return `*/${n}`;
+                }
+                if (state.mode === 'specific') {
+                    if (state.selected.size === 0) return '*';
+                    const vals = [...state.selected].sort((a,b) => a - b);
+                    // Check if it's a contiguous range
+                    if (vals.length > 2) {
+                        const isContiguous = vals.every((v, i) => i === 0 || v === vals[i-1] + 1);
+                        if (isContiguous) return `${vals[0]}-${vals[vals.length-1]}`;
+                    }
+                    // Check if all values selected = *
+                    const [min, max] = f.range;
+                    if (vals.length === (max - min + 1)) return '*';
+                    return vals.join(',');
+                }
+                return '*';
+            });
+            return parts.join(' ');
+        }
+
+        // ===== Expression → Builder =====
+        function expressionToBuilder(expr) {
+            const parts = expr.trim().split(/\s+/);
+            if (parts.length !== 5) return false;
+
+            FIELDS.forEach((f, i) => {
+                let part = parts[i];
+                if (f.key === 'dow') part = part.replace(/\b7\b/g, '0');
+                const state = builderState[f.key];
+
+                if (part === '*') {
+                    state.mode = 'every';
+                    state.selected = new Set();
+                    state.interval = 1;
+                } else if (part.match(/^\*\/(\d+)$/)) {
+                    const n = parseInt(part.match(/^\*\/(\d+)$/)[1]);
+                    if (f.modes && f.modes.includes('interval')) {
+                        state.mode = 'interval';
+                        state.interval = n;
+                        state.selected = new Set();
+                    } else {
+                        state.mode = 'specific';
+                        const vals = parseField(part, f.range[0], f.range[1]);
+                        state.selected = vals ? new Set(vals) : new Set();
+                    }
+                } else {
+                    state.mode = 'specific';
+                    const vals = parseField(part, f.range[0], f.range[1]);
+                    state.selected = vals ? new Set(vals) : new Set();
+                }
+            });
+            return true;
+        }
+
+        // ===== Render Builder Cards =====
+        function renderBuilderCards() {
+            const container = document.getElementById('builderCards');
+            container.innerHTML = '';
+
+            FIELDS.forEach((f, fi) => {
+                const state = builderState[f.key];
+                const card = document.createElement('div');
+                card.className = 'builder-card';
+
+                // Header
+                const header = document.createElement('div');
+                header.className = 'builder-header';
+                const title = document.createElement('div');
+                title.className = 'builder-title';
+                title.innerHTML = `<span class="color-dot" style="background:${f.color}"></span>${f.label}`;
+                const current = document.createElement('span');
+                current.className = 'builder-current';
+                const expr = cronInput.value.trim().split(/\s+/);
+                current.textContent = expr[fi] || '*';
+                header.appendChild(title);
+                header.appendChild(current);
+                card.appendChild(header);
+
+                // Mode selector
+                const modeDiv = document.createElement('div');
+                modeDiv.className = 'mode-selector';
+                f.modes.forEach((mode, mi) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'mode-btn' + (state.mode === mode ? ' active' : '');
+                    btn.textContent = f.modeLabels[mi];
+                    btn.onclick = () => {
+                        state.mode = mode;
+                        onBuilderChange();
+                    };
+                    modeDiv.appendChild(btn);
+                });
+                card.appendChild(modeDiv);
+
+                // Interval input
+                if (state.mode === 'interval') {
+                    const intDiv = document.createElement('div');
+                    intDiv.className = 'interval-input';
+                    intDiv.innerHTML = `<label>Every</label>`;
+                    const inp = document.createElement('input');
+                    inp.type = 'number';
+                    inp.min = '1';
+                    inp.max = (f.range[1] - f.range[0] + 1).toString();
+                    inp.value = state.interval || 2;
+                    inp.onchange = inp.oninput = () => {
+                        state.interval = Math.max(1, parseInt(inp.value) || 1);
+                        onBuilderChange();
+                    };
+                    intDiv.appendChild(inp);
+                    const lbl = document.createElement('label');
+                    lbl.textContent = f.label.toLowerCase() + (f.label.endsWith('s') ? '' : 's');
+                    intDiv.appendChild(lbl);
+                    card.appendChild(intDiv);
+                }
+
+                // Specific grid
+                if (state.mode === 'specific') {
+                    const grid = document.createElement('div');
+                    grid.className = 'value-grid ' + f.gridClass;
+
+                    for (let v = f.range[0]; v <= f.range[1]; v++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'grid-cell ' + f.colorClass + (state.selected.has(v) ? ' selected' : '');
+
+                        // Label
+                        if (f.key === 'month') {
+                            cell.textContent = MONTH_NAMES[v - 1];
+                        } else if (f.key === 'dow') {
+                            cell.textContent = DOW_NAMES[v];
+                        } else if (f.key === 'hour') {
+                            const ampm = v < 12 ? 'AM' : 'PM';
+                            const h12 = v === 0 ? 12 : v > 12 ? v - 12 : v;
+                            cell.innerHTML = `${v}<span class="sub">${ampm}</span>`;
+                        } else {
+                            cell.textContent = v;
+                        }
+
+                        cell.onclick = () => {
+                            if (state.selected.has(v)) state.selected.delete(v);
+                            else state.selected.add(v);
+                            onBuilderChange();
+                        };
+                        grid.appendChild(cell);
+                    }
+                    card.appendChild(grid);
+                }
+
+                container.appendChild(card);
+            });
+        }
+
+        // ===== Sync & Render =====
+        function onInputChange() {
+            if (updatingFromBuilder) return;
+            updatingFromInput = true;
+            const expr = cronInput.value.trim();
+            const valid = parseCron(expr);
+            cronInput.classList.toggle('invalid', !valid);
+
+            if (valid) {
+                expressionToBuilder(expr);
+                renderBuilderCards();
+                renderNextRuns(expr);
+                humanReadable.innerHTML = `<span class="emoji">&#128339;</span>${describeCron(expr)}`;
+            } else {
+                humanReadable.innerHTML = `<span style="color:var(--red)">Invalid cron expression</span>`;
+                nextRunsList.innerHTML = '<li style="color:var(--text-muted);justify-content:center">Enter a valid cron expression</li>';
+            }
+            updatingFromInput = false;
+        }
+
+        function onBuilderChange() {
+            if (updatingFromInput) return;
+            updatingFromBuilder = true;
+            const expr = builderToExpression();
+            cronInput.value = expr;
+            cronInput.classList.remove('invalid');
+            renderBuilderCards();
+            renderNextRuns(expr);
+            humanReadable.innerHTML = `<span class="emoji">&#128339;</span>${describeCron(expr)}`;
+            updatingFromBuilder = false;
+        }
+
+        function renderNextRuns(expr) {
+            const runs = getNextRuns(expr, 10);
+            nextRunsList.innerHTML = '';
+            if (runs.length === 0) {
+                nextRunsList.innerHTML = '<li style="color:var(--text-muted);justify-content:center">No upcoming runs found (within 1 year)</li>';
+                return;
+            }
+            runs.forEach((run, i) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="run-index">#${i+1}</span><span class="run-time">${formatDateTime(run)}</span><span class="run-relative">${formatRelative(run)}</span>`;
+                nextRunsList.appendChild(li);
+            });
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            tzNote.textContent = `Times shown in ${tz}`;
+        }
+
+        // ===== Presets =====
+        function renderPresets() {
+            const grid = document.getElementById('presetsGrid');
+            PRESETS.forEach(p => {
+                const btn = document.createElement('button');
+                btn.className = 'preset-btn';
+                btn.innerHTML = `${p.label}<span class="preset-expr">${p.expr}</span>`;
+                btn.onclick = () => {
+                    cronInput.value = p.expr;
+                    onInputChange();
+                };
+                grid.appendChild(btn);
+            });
+        }
+
+        // ===== Copy =====
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 1800);
+        }
+
+        document.getElementById('copyExpr').onclick = function() {
+            navigator.clipboard.writeText(cronInput.value.trim()).then(() => {
+                this.classList.add('copied');
+                this.textContent = 'Copied!';
+                showToast('Expression copied!');
+                setTimeout(() => { this.classList.remove('copied'); this.textContent = 'Copy'; }, 1500);
+            });
+        };
+
+        document.getElementById('copyCrontab').onclick = function() {
+            const line = cronInput.value.trim() + ' /path/to/command';
+            navigator.clipboard.writeText(line).then(() => {
+                this.classList.add('copied');
+                this.textContent = 'Copied!';
+                showToast('Crontab line copied!');
+                setTimeout(() => { this.classList.remove('copied'); this.textContent = 'Crontab'; }, 1500);
+            });
+        };
+
+        // ===== Reference Toggle =====
+        document.getElementById('refToggle').onclick = function() {
+            this.classList.toggle('open');
+            document.getElementById('refContent').classList.toggle('open');
+        };
+
+        // ===== Input Listener =====
+        cronInput.addEventListener('input', onInputChange);
+
+        // ===== Init =====
+        renderPresets();
+        onInputChange();
+
+    })();
+    </script>
+</body>
+</html>

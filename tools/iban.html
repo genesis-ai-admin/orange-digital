@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kostenloser IBAN-Validator & Formatierer — IBAN prüfen | Orange Digital</title>
+    <meta name="description" content="IBAN validieren und formatieren — kostenlos, direkt im Browser. Prüfsumme nach ISO 13616, Ländererkennung, Bankleitzahl-Extraktion. Kein Tracking.">
+    <meta property="og:title" content="Kostenloser IBAN-Validator & Formatierer — IBAN prüfen">
+    <meta property="og:description" content="IBAN validieren und formatieren — kostenlos, direkt im Browser. Prüfsumme nach ISO 13616, Ländererkennung, Bankleitzahl-Extraktion.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://the-tangerine-agent.github.io/orange-digital/tools/iban.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Kostenloser IBAN-Validator & Formatierer">
+    <meta name="twitter:description" content="IBAN validieren und formatieren — kostenlos, direkt im Browser. ISO 13616, Ländererkennung, BLZ-Extraktion. Kein Tracking.">
+    <link rel="canonical" href="https://the-tangerine-agent.github.io/orange-digital/tools/iban.html">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "IBAN Validator & Formatter",
+      "description": "Validate and format IBANs in your browser. MOD-97 checksum per ISO 13616, country detection, bank code extraction. Free, no tracking.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any (browser-based)",
+      "inLanguage": ["de", "en"],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Orange Digital"
+      }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-hover: #1a1a25;
+            --border: #ffffff12;
+            --text: #e8e8ed;
+            --text-muted: #8888a0;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --accent-glow: #6366f120;
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --radius: 12px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: #0a0a0fdd;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            height: 64px;
+        }
+        .nav-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .logo:hover { color: var(--accent-hover); }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        .lang-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .lang-toggle:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+            border-color: var(--accent);
+        }
+
+        /* MAIN */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 100px 24px 60px;
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .hero h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--text) 0%, var(--accent-hover) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* CARD */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-bottom: 24px;
+            transition: border-color 0.3s;
+        }
+
+        /* INPUT AREA */
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        .iban-input {
+            width: 100%;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 500;
+            padding: 20px 24px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            letter-spacing: 2px;
+        }
+        .iban-input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.5;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+        }
+        .iban-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+        }
+        .iban-input.valid {
+            border-color: var(--green);
+            box-shadow: 0 0 0 4px #22c55e20;
+        }
+        .iban-input.invalid {
+            border-color: var(--red);
+            box-shadow: 0 0 0 4px #ef444420;
+        }
+
+        /* ACTION BUTTONS */
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--surface-hover);
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+        .btn:active { transform: translateY(0); }
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .btn-accent:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+        .btn .icon { font-size: 1rem; }
+
+        /* RESULT */
+        .result {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .result.show { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .status-banner.valid {
+            background: #22c55e12;
+            border: 1px solid #22c55e30;
+            color: var(--green);
+        }
+        .status-banner.invalid {
+            background: #ef444412;
+            border: 1px solid #ef444430;
+            color: var(--red);
+        }
+        .status-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* INFO GRID */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .info-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            transition: border-color 0.2s;
+        }
+        .info-item:hover { border-color: var(--accent-glow); }
+        .info-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .info-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        .info-value .flag { font-size: 1.3rem; margin-right: 6px; }
+
+        /* EXAMPLES */
+        .examples-section {
+            margin-top: 32px;
+        }
+        .examples-section h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        .example-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .example-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .example-chip:hover {
+            border-color: var(--accent);
+            color: var(--text);
+            background: var(--surface-hover);
+        }
+        .example-chip .chip-flag { font-style: normal; }
+
+        /* HOW IT WORKS */
+        .how-section {
+            margin-top: 48px;
+        }
+        .how-section h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+        .how-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+        .how-card .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--accent-glow);
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        .how-card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .how-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        footer a:hover { color: var(--accent-hover); }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--surface);
+            border: 1px solid var(--green);
+            color: var(--green);
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 200;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.6rem; }
+            .hero p { font-size: 0.95rem; }
+            .iban-input {
+                font-size: 1rem;
+                padding: 16px;
+                letter-spacing: 1px;
+            }
+            .card { padding: 20px; }
+            .info-grid { grid-template-columns: 1fr; }
+            .nav-links a.hide-mobile { display: none; }
+            .actions { gap: 6px; }
+            .btn { padding: 8px 12px; font-size: 0.82rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="../" class="logo">&#x1F34A; Orange Digital</a>
+        <div class="nav-links">
+            <a href="../index.html#free-tools" class="hide-mobile">&#8592; <span data-i18n="navTools">Alle Tools</span></a>
+            <a href="../index.html#products" class="hide-mobile" data-i18n="navProducts">Produkte</a>
+            <button class="lang-toggle" id="langToggle" onclick="toggleLang()">EN</button>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <div class="hero">
+        <h1 data-i18n="heroTitle">IBAN-Validator & Formatierer</h1>
+        <p data-i18n="heroDesc">IBAN prüfen, formatieren und Bankinformationen extrahieren — kostenlos, direkt im Browser. Kein Tracking, keine Anmeldung.</p>
+    </div>
+
+    <div class="card">
+        <div class="input-wrapper">
+            <input
+                type="text"
+                class="iban-input"
+                id="ibanInput"
+                autocomplete="off"
+                spellcheck="false"
+                data-placeholder-de="IBAN eingeben, z.B. DE89 3704 0044 ..."
+                data-placeholder-en="Enter IBAN, e.g. DE89 3704 0044 ..."
+                placeholder="IBAN eingeben, z.B. DE89 3704 0044 ..."
+            >
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-accent" onclick="pasteFromClipboard()">
+                <span class="icon">&#x1F4CB;</span>
+                <span data-i18n="btnPaste">Einfügen</span>
+            </button>
+            <button class="btn" onclick="copyFormatted()" id="copyBtn" style="display:none;">
+                <span class="icon">&#x1F4C4;</span>
+                <span data-i18n="btnCopy">Kopieren</span>
+            </button>
+            <button class="btn" onclick="clearInput()" id="clearBtn" style="display:none;">
+                <span class="icon">&#x2715;</span>
+                <span data-i18n="btnClear">Löschen</span>
+            </button>
+        </div>
+
+        <div class="result" id="result">
+            <div class="status-banner" id="statusBanner">
+                <span class="status-icon" id="statusIcon"></span>
+                <span id="statusText"></span>
+            </div>
+            <div class="info-grid" id="infoGrid"></div>
+        </div>
+    </div>
+
+    <div class="examples-section">
+        <h3 data-i18n="examplesTitle">Beispiel-IBANs</h3>
+        <div class="example-chips" id="exampleChips"></div>
+    </div>
+
+    <div class="how-section">
+        <h2 data-i18n="howTitle">So funktioniert es</h2>
+        <div class="how-grid">
+            <div class="how-card">
+                <div class="step-num">1</div>
+                <h4 data-i18n="step1Title">IBAN eingeben</h4>
+                <p data-i18n="step1Desc">Tippen, einfügen oder ein Beispiel wählen. Die IBAN wird automatisch in 4er-Gruppen formatiert.</p>
+            </div>
+            <div class="how-card">
+                <div class="step-num">2</div>
+                <h4 data-i18n="step2Title">Sofort validiert</h4>
+                <p data-i18n="step2Desc">MOD-97-Prüfsumme nach ISO 13616, Längenprüfung und Ländererkennung — alles lokal in Ihrem Browser.</p>
+            </div>
+            <div class="how-card">
+                <div class="step-num">3</div>
+                <h4 data-i18n="step3Title">Details anzeigen</h4>
+                <p data-i18n="step3Desc">Land, Bankleitzahl, Kontonummer und weitere Infos werden automatisch extrahiert und angezeigt.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <span data-i18n="footer">Erstellt von Orange Digital — Kostenlos, für immer. Kein Tracking. Keine Anmeldung.</span>
+    <br>
+    <a href="../" data-i18n="footerLink">← Zurück zum Storefront</a>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── TRANSLATIONS ────────────────────────────────────────
+const i18n = {
+    de: {
+        navTools: 'Alle Tools',
+        navProducts: 'Produkte',
+        heroTitle: 'IBAN-Validator & Formatierer',
+        heroDesc: 'IBAN prüfen, formatieren und Bankinformationen extrahieren — kostenlos, direkt im Browser. Kein Tracking, keine Anmeldung.',
+        btnPaste: 'Einfügen',
+        btnCopy: 'Kopieren',
+        btnClear: 'Löschen',
+        examplesTitle: 'Beispiel-IBANs',
+        howTitle: 'So funktioniert es',
+        step1Title: 'IBAN eingeben',
+        step1Desc: 'Tippen, einfügen oder ein Beispiel wählen. Die IBAN wird automatisch in 4er-Gruppen formatiert.',
+        step2Title: 'Sofort validiert',
+        step2Desc: 'MOD-97-Prüfsumme nach ISO 13616, Längenprüfung und Ländererkennung — alles lokal in Ihrem Browser.',
+        step3Title: 'Details anzeigen',
+        step3Desc: 'Land, Bankleitzahl, Kontonummer und weitere Infos werden automatisch extrahiert und angezeigt.',
+        footer: 'Erstellt von Orange Digital — Kostenlos, für immer. Kein Tracking. Keine Anmeldung.',
+        footerLink: '← Zurück zum Storefront',
+        statusValid: 'Gültige IBAN — Prüfsumme korrekt',
+        statusInvalid: 'Ungültige IBAN',
+        errChecksum: 'MOD-97-Prüfsumme ist falsch.',
+        errLength: 'Falsche Länge für dieses Land. Erwartet: {expected}, erhalten: {got}.',
+        errCountry: 'Unbekannter Ländercode.',
+        errShort: 'IBAN zu kurz.',
+        errFormat: 'Ungültiges Format. Nur Buchstaben und Ziffern erlaubt.',
+        labelCountry: 'Land',
+        labelIban: 'Formatierte IBAN',
+        labelLength: 'Länge',
+        labelChecksum: 'Prüfsumme',
+        labelBlz: 'Bankleitzahl (BLZ)',
+        labelKonto: 'Kontonummer',
+        labelBban: 'BBAN',
+        checksumOk: '✓ Korrekt',
+        checksumFail: '✗ Falsch',
+        lengthOk: '{len} Zeichen ✓',
+        lengthBad: '{len} / {expected} Zeichen ✗',
+        copied: 'IBAN kopiert!',
+        pasteError: 'Zugriff auf Zwischenablage nicht möglich.',
+    },
+    en: {
+        navTools: 'All Tools',
+        navProducts: 'Products',
+        heroTitle: 'IBAN Validator & Formatter',
+        heroDesc: 'Validate, format and extract bank details from any IBAN — free, right in your browser. No tracking, no signup.',
+        btnPaste: 'Paste',
+        btnCopy: 'Copy',
+        btnClear: 'Clear',
+        examplesTitle: 'Example IBANs',
+        howTitle: 'How it works',
+        step1Title: 'Enter IBAN',
+        step1Desc: 'Type, paste, or pick an example. The IBAN is automatically formatted in groups of 4.',
+        step2Title: 'Instant validation',
+        step2Desc: 'MOD-97 checksum per ISO 13616, length check and country detection — all locally in your browser.',
+        step3Title: 'View details',
+        step3Desc: 'Country, bank code, account number and more are automatically extracted and displayed.',
+        footer: 'Built by Orange Digital — Free, forever. No tracking. No signup.',
+        footerLink: '← Back to Storefront',
+        statusValid: 'Valid IBAN — Checksum correct',
+        statusInvalid: 'Invalid IBAN',
+        errChecksum: 'MOD-97 checksum is incorrect.',
+        errLength: 'Wrong length for this country. Expected: {expected}, got: {got}.',
+        errCountry: 'Unknown country code.',
+        errShort: 'IBAN too short.',
+        errFormat: 'Invalid format. Only letters and digits allowed.',
+        labelCountry: 'Country',
+        labelIban: 'Formatted IBAN',
+        labelLength: 'Length',
+        labelChecksum: 'Checksum',
+        labelBlz: 'Bank Code (BLZ)',
+        labelKonto: 'Account Number',
+        labelBban: 'BBAN',
+        checksumOk: '✓ Correct',
+        checksumFail: '✗ Incorrect',
+        lengthOk: '{len} characters ✓',
+        lengthBad: '{len} / {expected} characters ✗',
+        copied: 'IBAN copied!',
+        pasteError: 'Cannot access clipboard.',
+    }
+};
+
+let lang = 'de';
+
+function t(key) { return (i18n[lang] && i18n[lang][key]) || key; }
+
+function toggleLang() {
+    lang = lang === 'de' ? 'en' : 'de';
+    document.getElementById('langToggle').textContent = lang === 'de' ? 'EN' : 'DE';
+    document.documentElement.lang = lang;
+    // Update all i18n elements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[lang][key]) el.textContent = i18n[lang][key];
+    });
+    // Update placeholder
+    const input = document.getElementById('ibanInput');
+    input.placeholder = input.getAttribute('data-placeholder-' + lang);
+    // Re-validate to update result text
+    if (input.value.trim()) validateIBAN(input.value);
+}
+
+// ─── COUNTRY DATA ────────────────────────────────────────
+const COUNTRY_LENGTHS = {
+    AL:28, AD:24, AT:20, AZ:28, BH:22, BY:28, BE:16, BA:20, BR:29, BG:22,
+    HR:21, CY:28, CZ:24, DK:18, DO:28, TL:23, EE:20, FO:18, FI:18, FR:27,
+    GE:22, DE:22, GI:23, GR:27, GL:18, GT:28, HU:28, IS:26, IQ:23, IE:22,
+    IL:23, IT:27, JO:30, KZ:20, XK:20, KW:30, LV:21, LB:28, LI:21, LT:20,
+    LU:20, MT:31, MR:27, MU:30, MC:27, MD:24, ME:22, NL:18, MK:19, NO:15,
+    PK:24, PS:29, PL:28, PT:25, QA:29, RO:24, LC:32, SM:27, ST:25, SA:24,
+    RS:22, SC:31, SK:24, SI:19, ES:24, SE:24, CH:21, TN:24, TR:26, UA:29,
+    AE:23, GB:22, VA:22, VG:24
+};
+
+const COUNTRY_NAMES = {
+    de: {
+        DE:'Deutschland', AT:'Österreich', CH:'Schweiz', GB:'Vereinigtes Königreich',
+        FR:'Frankreich', IT:'Italien', ES:'Spanien', NL:'Niederlande', BE:'Belgien',
+        LU:'Luxemburg', PL:'Polen', CZ:'Tschechien', SE:'Schweden', DK:'Dänemark',
+        NO:'Norwegen', FI:'Finnland', PT:'Portugal', IE:'Irland', GR:'Griechenland',
+        HR:'Kroatien', HU:'Ungarn', RO:'Rumänien', BG:'Bulgarien', SK:'Slowakei',
+        SI:'Slowenien', LT:'Litauen', LV:'Lettland', EE:'Estland', MT:'Malta',
+        CY:'Zypern', AL:'Albanien', AD:'Andorra', BA:'Bosnien u. Herzegowina',
+        ME:'Montenegro', MK:'Nordmazedonien', RS:'Serbien', TR:'Türkei',
+        LI:'Liechtenstein', MC:'Monaco', SM:'San Marino', IS:'Island'
+    },
+    en: {
+        DE:'Germany', AT:'Austria', CH:'Switzerland', GB:'United Kingdom',
+        FR:'France', IT:'Italy', ES:'Spain', NL:'Netherlands', BE:'Belgium',
+        LU:'Luxembourg', PL:'Poland', CZ:'Czech Republic', SE:'Sweden', DK:'Denmark',
+        NO:'Norway', FI:'Finland', PT:'Portugal', IE:'Ireland', GR:'Greece',
+        HR:'Croatia', HU:'Hungary', RO:'Romania', BG:'Bulgaria', SK:'Slovakia',
+        SI:'Slovenia', LT:'Lithuania', LV:'Latvia', EE:'Estonia', MT:'Malta',
+        CY:'Cyprus', AL:'Albania', AD:'Andorra', BA:'Bosnia and Herzegovina',
+        ME:'Montenegro', MK:'North Macedonia', RS:'Serbia', TR:'Turkey',
+        LI:'Liechtenstein', MC:'Monaco', SM:'San Marino', IS:'Iceland'
+    }
+};
+
+const COUNTRY_FLAGS = {
+    DE:'🇩🇪', AT:'🇦🇹', CH:'🇨🇭', GB:'🇬🇧', FR:'🇫🇷', IT:'🇮🇹', ES:'🇪🇸',
+    NL:'🇳🇱', BE:'🇧🇪', LU:'🇱🇺', PL:'🇵🇱', CZ:'🇨🇿', SE:'🇸🇪', DK:'🇩🇰',
+    NO:'🇳🇴', FI:'🇫🇮', PT:'🇵🇹', IE:'🇮🇪', GR:'🇬🇷', HR:'🇭🇷', HU:'🇭🇺',
+    RO:'🇷🇴', BG:'🇧🇬', SK:'🇸🇰', SI:'🇸🇮', LT:'🇱🇹', LV:'🇱🇻', EE:'🇪🇪',
+    MT:'🇲🇹', CY:'🇨🇾', AL:'🇦🇱', AD:'🇦🇩', BA:'🇧🇦', ME:'🇲🇪', MK:'🇲🇰',
+    RS:'🇷🇸', TR:'🇹🇷', LI:'🇱🇮', MC:'🇲🇨', SM:'🇸🇲', IS:'🇮🇸'
+};
+
+const EXAMPLES = [
+    { code: 'DE', iban: 'DE89370400440532013000' },
+    { code: 'AT', iban: 'AT611904300234573201' },
+    { code: 'CH', iban: 'CH9300762011623852957' },
+    { code: 'GB', iban: 'GB29NWBK60161331926819' },
+    { code: 'FR', iban: 'FR7630006000011234567890189' },
+    { code: 'NL', iban: 'NL91ABNA0417164300' },
+    { code: 'ES', iban: 'ES9121000418450200051332' },
+    { code: 'IT', iban: 'IT60X0542811101000000123456' },
+];
+
+// ─── MOD-97 (BigInt) ─────────────────────────────────────
+function mod97(ibanStr) {
+    // Rearrange: move first 4 chars to end
+    const rearranged = ibanStr.slice(4) + ibanStr.slice(0, 4);
+    // Convert letters to numbers (A=10, B=11, ... Z=35)
+    let numStr = '';
+    for (let i = 0; i < rearranged.length; i++) {
+        const c = rearranged.charCodeAt(i);
+        if (c >= 65 && c <= 90) {
+            numStr += (c - 55).toString();
+        } else {
+            numStr += rearranged[i];
+        }
+    }
+    // Use BigInt for precise modulo
+    try {
+        return Number(BigInt(numStr) % 97n);
+    } catch (e) {
+        // Fallback: chunk-based modulo for environments without BigInt
+        let remainder = 0;
+        for (let i = 0; i < numStr.length; i++) {
+            remainder = (remainder * 10 + parseInt(numStr[i], 10)) % 97;
+        }
+        return remainder;
+    }
+}
+
+// ─── FORMAT ──────────────────────────────────────────────
+function formatIBAN(raw) {
+    const clean = raw.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+    return clean.replace(/(.{4})/g, '$1 ').trim();
+}
+
+// ─── VALIDATE ────────────────────────────────────────────
+function validateIBAN(rawValue) {
+    const clean = rawValue.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+    const input = document.getElementById('ibanInput');
+    const resultEl = document.getElementById('result');
+    const banner = document.getElementById('statusBanner');
+    const statusIcon = document.getElementById('statusIcon');
+    const statusText = document.getElementById('statusText');
+    const infoGrid = document.getElementById('infoGrid');
+    const copyBtn = document.getElementById('copyBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    clearBtn.style.display = clean.length > 0 ? 'inline-flex' : 'none';
+
+    if (clean.length < 2) {
+        resultEl.classList.remove('show');
+        input.classList.remove('valid', 'invalid');
+        copyBtn.style.display = 'none';
+        return;
+    }
+
+    // Format check
+    if (!/^[A-Z0-9]+$/.test(clean)) {
+        showInvalid(t('errFormat'));
+        return;
+    }
+
+    if (clean.length < 5) {
+        resultEl.classList.remove('show');
+        input.classList.remove('valid', 'invalid');
+        return;
+    }
+
+    const countryCode = clean.slice(0, 2);
+    const expectedLength = COUNTRY_LENGTHS[countryCode];
+    const flag = COUNTRY_FLAGS[countryCode] || '🏳️';
+    const countryName = (COUNTRY_NAMES[lang] && COUNTRY_NAMES[lang][countryCode]) || countryCode;
+
+    // Unknown country
+    if (!expectedLength) {
+        if (clean.length >= 4) {
+            showInvalid(t('errCountry'));
+        }
+        return;
+    }
+
+    // Still typing — don't show error yet
+    if (clean.length < expectedLength) {
+        resultEl.classList.remove('show');
+        input.classList.remove('valid', 'invalid');
+        copyBtn.style.display = 'none';
+        return;
+    }
+
+    // Too long
+    if (clean.length > expectedLength) {
+        showInvalid(t('errLength').replace('{expected}', expectedLength).replace('{got}', clean.length));
+        return;
+    }
+
+    // Length matches — check MOD-97
+    const remainder = mod97(clean);
+    const isValid = remainder === 1;
+
+    if (isValid) {
+        input.classList.remove('invalid');
+        input.classList.add('valid');
+        banner.className = 'status-banner valid';
+        statusIcon.textContent = '✓';
+        statusText.textContent = t('statusValid');
+        copyBtn.style.display = 'inline-flex';
+    } else {
+        input.classList.remove('valid');
+        input.classList.add('invalid');
+        banner.className = 'status-banner invalid';
+        statusIcon.textContent = '✗';
+        statusText.textContent = t('statusInvalid') + ' — ' + t('errChecksum');
+        copyBtn.style.display = 'none';
+    }
+
+    // Build info grid
+    let html = '';
+
+    // Country
+    html += infoItem(t('labelCountry'), `<span class="flag">${flag}</span> ${countryName}`);
+
+    // Formatted IBAN
+    html += infoItem(t('labelIban'), formatIBAN(clean));
+
+    // Length
+    if (clean.length === expectedLength) {
+        html += infoItem(t('labelLength'), t('lengthOk').replace('{len}', clean.length));
+    } else {
+        html += infoItem(t('labelLength'), t('lengthBad').replace('{len}', clean.length).replace('{expected}', expectedLength));
+    }
+
+    // Checksum
+    html += infoItem(t('labelChecksum'), isValid ? t('checksumOk') : t('checksumFail'));
+
+    // BBAN
+    const bban = clean.slice(4);
+    html += infoItem(t('labelBban'), bban);
+
+    // DE-specific: BLZ + Kontonummer
+    if (countryCode === 'DE' && clean.length === 22) {
+        const blz = clean.slice(4, 12);
+        const konto = clean.slice(12);
+        html += infoItem(t('labelBlz'), blz);
+        html += infoItem(t('labelKonto'), konto);
+    }
+
+    infoGrid.innerHTML = html;
+    resultEl.classList.add('show');
+
+    function showInvalid(msg) {
+        input.classList.remove('valid');
+        input.classList.add('invalid');
+        banner.className = 'status-banner invalid';
+        statusIcon.textContent = '✗';
+        statusText.textContent = t('statusInvalid') + ' — ' + msg;
+        infoGrid.innerHTML = '';
+        resultEl.classList.add('show');
+        copyBtn.style.display = 'none';
+    }
+}
+
+function infoItem(label, value) {
+    return `<div class="info-item"><div class="info-label">${label}</div><div class="info-value">${value}</div></div>`;
+}
+
+// ─── INPUT HANDLER ───────────────────────────────────────
+const ibanInput = document.getElementById('ibanInput');
+let prevCursorPos = 0;
+
+ibanInput.addEventListener('input', function(e) {
+    const raw = this.value;
+    const clean = raw.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+    const formatted = formatIBAN(clean);
+
+    // Calculate cursor position
+    const rawCursor = this.selectionStart;
+    // Count non-space chars before cursor in raw
+    let nonSpaceBefore = 0;
+    for (let i = 0; i < rawCursor && i < raw.length; i++) {
+        if (raw[i] !== ' ') nonSpaceBefore++;
+    }
+    // Find corresponding position in formatted
+    let newCursor = 0;
+    let count = 0;
+    for (let i = 0; i < formatted.length; i++) {
+        if (count === nonSpaceBefore) break;
+        if (formatted[i] !== ' ') count++;
+        newCursor = i + 1;
+    }
+
+    this.value = formatted;
+    this.setSelectionRange(newCursor, newCursor);
+    validateIBAN(formatted);
+});
+
+// ─── ACTIONS ─────────────────────────────────────────────
+async function pasteFromClipboard() {
+    try {
+        const text = await navigator.clipboard.readText();
+        ibanInput.value = '';
+        ibanInput.value = formatIBAN(text.replace(/[^A-Z0-9]/gi, '').toUpperCase());
+        ibanInput.focus();
+        validateIBAN(ibanInput.value);
+    } catch (e) {
+        showToast(t('pasteError'));
+    }
+}
+
+function copyFormatted() {
+    const clean = ibanInput.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+    const formatted = formatIBAN(clean);
+    navigator.clipboard.writeText(formatted).then(() => {
+        showToast(t('copied'));
+    });
+}
+
+function clearInput() {
+    ibanInput.value = '';
+    ibanInput.classList.remove('valid', 'invalid');
+    document.getElementById('result').classList.remove('show');
+    document.getElementById('copyBtn').style.display = 'none';
+    document.getElementById('clearBtn').style.display = 'none';
+    ibanInput.focus();
+}
+
+function loadExample(iban) {
+    ibanInput.value = formatIBAN(iban);
+    ibanInput.focus();
+    validateIBAN(iban);
+}
+
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+// ─── BUILD EXAMPLE CHIPS ─────────────────────────────────
+function buildExamples() {
+    const container = document.getElementById('exampleChips');
+    container.innerHTML = EXAMPLES.map(ex => {
+        const flag = COUNTRY_FLAGS[ex.code] || '';
+        return `<button class="example-chip" onclick="loadExample('${ex.iban}')"><span class="chip-flag">${flag}</span> ${ex.code}</button>`;
+    }).join('');
+}
+
+buildExamples();
+</script>
+
+</body>
+</html>
