@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Base64 Encoder/Decoder — Encode & Decode Instantly | Orange Digital</title>
+    <meta name="description" content="Encode and decode Base64 strings instantly. Supports text, URLs, and file encoding. Free, no tracking, runs locally in your browser.">
+    <meta name="keywords" content="base64 encoder, base64 decoder, base64 encode, base64 decode, base64 converter, base64 online, base64 tool">
+    <meta property="og:title" content="Free Base64 Encoder/Decoder — Encode & Decode Instantly | Orange Digital">
+    <meta property="og:description" content="Encode and decode Base64 strings instantly. Supports text, URLs, and file encoding. Free, no tracking, runs locally in your browser.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://the-tangerine-agent.github.io/orange-digital/tools/base64.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free Base64 Encoder/Decoder — Orange Digital">
+    <meta name="twitter:description" content="Encode and decode Base64 strings instantly. 100% browser-based, no tracking.">
+    <link rel="canonical" href="https://the-tangerine-agent.github.io/orange-digital/tools/base64.html">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Base64 Encoder/Decoder",
+      "description": "Free browser-based Base64 encoder and decoder. Encode text to Base64 or decode Base64 to text instantly. Supports URL-safe encoding and file uploads.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any (browser-based)",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "creator": { "@type": "Organization", "name": "Orange Digital" }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-hover: #1a1a25;
+            --border: #ffffff12;
+            --text: #e8e8ed;
+            --text-muted: #8888a0;
+            --accent: #6366f1;
+            --accent-hover: #818cf8;
+            --accent-glow: #6366f120;
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --radius: 12px;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: #0a0a0fdd; backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); padding: 0 24px;
+        }
+        .nav-inner {
+            max-width: 900px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; height: 64px;
+        }
+        .logo { font-weight: 800; font-size: 1.1rem; color: var(--accent); text-decoration: none; }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .container { max-width: 900px; margin: 0 auto; padding: 96px 24px 40px; }
+        h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.03em; }
+        h1 .accent { color: var(--accent); }
+        .tagline { color: var(--text-muted); margin-bottom: 32px; font-size: 1rem; }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Mode Toggle */
+        .mode-toggle {
+            display: flex; gap: 0; margin-bottom: 20px;
+            border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+        }
+        .mode-btn {
+            flex: 1; padding: 12px 20px; background: transparent; border: none;
+            color: var(--text-muted); font-family: 'Inter', sans-serif;
+            font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+        }
+        .mode-btn.active {
+            background: var(--accent); color: white;
+        }
+        .mode-btn:hover:not(.active) { background: var(--surface-hover); color: var(--text); }
+
+        /* Textareas */
+        .io-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        @media (max-width: 640px) { .io-grid { grid-template-columns: 1fr; } }
+        .io-group { display: flex; flex-direction: column; }
+        .io-label {
+            font-size: 0.8rem; font-weight: 600; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .io-label .char-count { font-weight: 400; font-size: 0.75rem; }
+        textarea {
+            width: 100%; min-height: 200px; padding: 16px;
+            background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+            color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            line-height: 1.5; resize: vertical; transition: border-color 0.2s;
+        }
+        textarea:focus { outline: none; border-color: var(--accent); }
+        textarea::placeholder { color: var(--text-muted); opacity: 0.5; }
+
+        /* Action buttons */
+        .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+        .btn {
+            padding: 10px 20px; border-radius: 8px; border: none;
+            font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .btn-secondary { background: var(--surface-hover); color: var(--text); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* Options */
+        .options { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+        .option-label {
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
+            color: var(--text-muted); font-size: 0.85rem;
+        }
+        .option-label input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16px; }
+
+        /* Status */
+        .status {
+            padding: 10px 16px; border-radius: 8px; font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace; display: none;
+        }
+        .status.success { display: block; background: #22c55e15; color: var(--green); border: 1px solid #22c55e30; }
+        .status.error { display: block; background: #ef444415; color: var(--red); border: 1px solid #ef444430; }
+
+        /* File upload */
+        .file-drop {
+            border: 2px dashed var(--border); border-radius: var(--radius);
+            padding: 32px; text-align: center; cursor: pointer;
+            transition: all 0.2s; margin-bottom: 16px;
+        }
+        .file-drop:hover, .file-drop.dragover {
+            border-color: var(--accent); background: var(--accent-glow);
+        }
+        .file-drop-text { color: var(--text-muted); font-size: 0.9rem; }
+        .file-drop-text strong { color: var(--text); }
+
+        /* Info section */
+        .info-section { margin-top: 40px; }
+        .info-section h2 {
+            font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em;
+        }
+        .info-section p, .info-section li {
+            color: var(--text-muted); font-size: 0.9rem; line-height: 1.7;
+        }
+        .info-section ul { list-style: none; padding: 0; }
+        .info-section li::before { content: "→ "; color: var(--accent); font-weight: 600; }
+        .info-section li { margin-bottom: 6px; }
+
+        footer {
+            text-align: center; padding: 40px 24px; color: var(--text-muted); font-size: 0.8rem;
+            border-top: 1px solid var(--border); margin-top: 60px;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="../" class="logo">Orange Digital</a>
+            <div class="nav-links">
+                <a href="../#products">Products</a>
+                <a href="../#free-tools">Free Tools</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Base64 <span class="accent">Encoder/Decoder</span></h1>
+        <p class="tagline">Encode text to Base64 or decode Base64 to text — instantly, privately, in your browser.</p>
+
+        <div class="card">
+            <div class="mode-toggle">
+                <button class="mode-btn active" data-mode="encode" onclick="setMode('encode')">Encode</button>
+                <button class="mode-btn" data-mode="decode" onclick="setMode('decode')">Decode</button>
+            </div>
+
+            <div class="options">
+                <label class="option-label">
+                    <input type="checkbox" id="urlSafe" onchange="convert()">
+                    URL-safe encoding
+                </label>
+                <label class="option-label">
+                    <input type="checkbox" id="lineBreaks" onchange="convert()">
+                    Line breaks (76 chars)
+                </label>
+            </div>
+
+            <div class="io-grid">
+                <div class="io-group">
+                    <div class="io-label">
+                        <span id="inputLabel">Input (Text)</span>
+                        <span class="char-count" id="inputCount">0 chars</span>
+                    </div>
+                    <textarea id="inputArea" placeholder="Paste text to encode..." oninput="convert()"></textarea>
+                </div>
+                <div class="io-group">
+                    <div class="io-label">
+                        <span id="outputLabel">Output (Base64)</span>
+                        <span class="char-count" id="outputCount">0 chars</span>
+                    </div>
+                    <textarea id="outputArea" placeholder="Result will appear here..." readonly></textarea>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" onclick="copyOutput()">Copy Output</button>
+                <button class="btn btn-secondary" onclick="swapFields()">Swap</button>
+                <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+            </div>
+
+            <div class="status" id="status"></div>
+        </div>
+
+        <div class="card">
+            <div class="io-label" style="margin-bottom: 12px;">
+                <span>File to Base64</span>
+            </div>
+            <div class="file-drop" id="fileDrop" onclick="document.getElementById('fileInput').click()">
+                <input type="file" id="fileInput" style="display:none" onchange="handleFile(event)">
+                <p class="file-drop-text">
+                    <strong>Click to select</strong> or drag & drop a file<br>
+                    Max 5 MB — encoded result appears in output
+                </p>
+            </div>
+            <div class="status" id="fileStatus"></div>
+        </div>
+
+        <div class="info-section">
+            <h2>What is Base64?</h2>
+            <p style="margin-bottom: 16px;">Base64 is an encoding scheme that converts binary data into ASCII text using 64 characters (A-Z, a-z, 0-9, +, /). It's commonly used for:</p>
+            <ul>
+                <li>Embedding images in HTML/CSS as data URIs</li>
+                <li>Encoding email attachments (MIME)</li>
+                <li>Transmitting binary data in JSON/XML APIs</li>
+                <li>Encoding authentication credentials (HTTP Basic Auth)</li>
+                <li>Storing binary data in text-only formats</li>
+            </ul>
+            <p style="margin-top: 16px;">Base64 increases data size by ~33%. URL-safe encoding replaces <code style="color:var(--accent)">+</code> with <code style="color:var(--accent)">-</code> and <code style="color:var(--accent)">/</code> with <code style="color:var(--accent)">_</code> for safe use in URLs.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Built by <a href="../">Orange Digital</a> — 100% client-side, no data sent anywhere.</p>
+    </footer>
+
+    <script>
+        let mode = 'encode';
+
+        function setMode(m) {
+            mode = m;
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === m));
+            if (m === 'encode') {
+                document.getElementById('inputLabel').textContent = 'Input (Text)';
+                document.getElementById('outputLabel').textContent = 'Output (Base64)';
+                document.getElementById('inputArea').placeholder = 'Paste text to encode...';
+            } else {
+                document.getElementById('inputLabel').textContent = 'Input (Base64)';
+                document.getElementById('outputLabel').textContent = 'Output (Text)';
+                document.getElementById('inputArea').placeholder = 'Paste Base64 to decode...';
+            }
+            convert();
+        }
+
+        function convert() {
+            const input = document.getElementById('inputArea').value;
+            const output = document.getElementById('outputArea');
+            const status = document.getElementById('status');
+            const urlSafe = document.getElementById('urlSafe').checked;
+            const lineBreaks = document.getElementById('lineBreaks').checked;
+
+            document.getElementById('inputCount').textContent = input.length + ' chars';
+            status.className = 'status';
+            status.textContent = '';
+
+            if (!input.trim()) {
+                output.value = '';
+                document.getElementById('outputCount').textContent = '0 chars';
+                return;
+            }
+
+            try {
+                let result;
+                if (mode === 'encode') {
+                    result = btoa(unescape(encodeURIComponent(input)));
+                    if (urlSafe) {
+                        result = result.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+                    }
+                    if (lineBreaks) {
+                        result = result.match(/.{1,76}/g).join('\n');
+                    }
+                } else {
+                    let b64 = input.trim();
+                    if (urlSafe) {
+                        b64 = b64.replace(/-/g, '+').replace(/_/g, '/');
+                        while (b64.length % 4) b64 += '=';
+                    }
+                    b64 = b64.replace(/\s/g, '');
+                    result = decodeURIComponent(escape(atob(b64)));
+                }
+                output.value = result;
+                document.getElementById('outputCount').textContent = result.length + ' chars';
+                const ratio = mode === 'encode' ?
+                    ((result.replace(/\s/g, '').length / new Blob([input]).size) * 100).toFixed(0) + '% of original' :
+                    ((result.length / input.replace(/\s/g, '').length) * 100).toFixed(0) + '% of encoded';
+                status.className = 'status success';
+                status.textContent = (mode === 'encode' ? 'Encoded' : 'Decoded') + ' successfully — ' + ratio;
+            } catch (e) {
+                output.value = '';
+                document.getElementById('outputCount').textContent = '0 chars';
+                status.className = 'status error';
+                status.textContent = 'Error: ' + (mode === 'decode' ? 'Invalid Base64 input' : e.message);
+            }
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('outputArea');
+            if (!output.value) return;
+            navigator.clipboard.writeText(output.value).then(() => {
+                const status = document.getElementById('status');
+                status.className = 'status success';
+                status.textContent = 'Copied to clipboard!';
+                setTimeout(() => { if (status.textContent === 'Copied to clipboard!') convert(); }, 1500);
+            });
+        }
+
+        function swapFields() {
+            const input = document.getElementById('inputArea');
+            const output = document.getElementById('outputArea');
+            input.value = output.value;
+            setMode(mode === 'encode' ? 'decode' : 'encode');
+        }
+
+        function clearAll() {
+            document.getElementById('inputArea').value = '';
+            document.getElementById('outputArea').value = '';
+            document.getElementById('inputCount').textContent = '0 chars';
+            document.getElementById('outputCount').textContent = '0 chars';
+            document.getElementById('status').className = 'status';
+            document.getElementById('fileStatus').className = 'status';
+        }
+
+        // File handling
+        const fileDrop = document.getElementById('fileDrop');
+        fileDrop.addEventListener('dragover', e => { e.preventDefault(); fileDrop.classList.add('dragover'); });
+        fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('dragover'));
+        fileDrop.addEventListener('drop', e => {
+            e.preventDefault(); fileDrop.classList.remove('dragover');
+            if (e.dataTransfer.files.length) processFile(e.dataTransfer.files[0]);
+        });
+
+        function handleFile(e) { if (e.target.files.length) processFile(e.target.files[0]); }
+
+        function processFile(file) {
+            const fileStatus = document.getElementById('fileStatus');
+            if (file.size > 5 * 1024 * 1024) {
+                fileStatus.className = 'status error';
+                fileStatus.textContent = 'File too large (max 5 MB)';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function() {
+                const base64 = reader.result.split(',')[1] || reader.result;
+                document.getElementById('outputArea').value = base64;
+                document.getElementById('outputCount').textContent = base64.length + ' chars';
+                setMode('encode');
+                document.getElementById('inputArea').value = '[File: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)]';
+                fileStatus.className = 'status success';
+                fileStatus.textContent = 'File encoded: ' + file.name + ' → ' + base64.length + ' chars Base64';
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>
